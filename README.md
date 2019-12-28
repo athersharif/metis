@@ -52,7 +52,7 @@ Hello.propTypes = {
   })
 };
 
-export default withGoogleSheets(Hello);
+export default withGoogleSheets('sheet1')(Hello);
 ```
 
 #### Fetching data from multiple sheets
@@ -64,7 +64,7 @@ export default flowRight(
   withGoogleSheets('sheet1'),
   withGoogleSheets('sheet2'),
   withGoogleSheets('sheet3')    
-);
+)(Hello);
 ```
 
 If you want data from all the sheets, it's better to use `db` from using React's context.
@@ -105,7 +105,7 @@ const config = {
   }
 };
 
-withGoogleSheets('sheet1', config);
+withGoogleSheets('sheet1', config)(Hello);
 ```
 
 If you'd like to use your own component (say `CustomLoadErrorComponent`) instead of the default one:
@@ -118,7 +118,7 @@ const config = {
   }
 };
 
-withGoogleSheets('sheet1', config);
+withGoogleSheets('sheet1', config)(Hello);
 ```
 
 ## Specifying DOC ID and API key
@@ -135,7 +135,7 @@ REACT_APP_GOOGLE_SHEETS_DOC_ID=[YOUR-DOC-ID]
 The DOC ID can be obtained from the URL of the Google Sheet. For example:
 
 ```
-https://docs.google.com/spreadsheets/d/[THIS-IS-THE-DOC-ID]/edit#gid=0
+https://docs.google.com/spreadsheets/d/[THIS-IS-THE-DOC-ID]/
 ```
 
 **Note: Make sure this file is viewable to public**. Given this, you may want to consider using a traditional database if database contains private information such as passwords, etc. Google Sheets as a Database is very much intended for simple websites where the information is public -- such as landing pages, resume/portfolio websites, etc.

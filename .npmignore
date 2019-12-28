@@ -12,4 +12,5 @@ jsdoc.conf.json
 .eslintrc
 .babelrc
 .gitignore
+.npmrc
 .travis.yml
