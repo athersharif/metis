@@ -1,0 +1,80 @@
+{
+  "name": "react-db-google-sheets",
+  "version": "1.0.0",
+  "description": "React HOC for using Google Sheets as Database",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src --ignore src/setupTests.js,src/__tests__ --out-dir dist",
+    "docs": "jsdoc -c jsdoc.conf.json -d docs/ src/*.js",
+    "lint": "eslint src/",
+    "lint-staged": "lint-staged",
+    "prepublish": "rm -rf dist/* && npm run build",
+    "prettier": "prettier --single-quote --write '{,!(coverage|node_modules|docs|dist)/**/}*.{js,css,json}'",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/athersharif/react-db-google-sheets.git"
+  },
+  "keywords": [
+    "react",
+    "hoc",
+    "google",
+    "sheets",
+    "db",
+    "database"
+  ],
+  "author": "Ather Sharif <ather.sharif@gmail.com>",
+  "license": "MIT",
+  "pre-commit": "lint-staged",
+  "lint-staged": {
+    "*.{js,json,css},!dist/*.{js,json,css}": [
+      "npm run prettier",
+      "git add -u"
+    ]
+  },
+  "jest": {
+    "automock": false,
+    "setupFiles": [
+      "./src/setupTests.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
+    "babel-polyfill": "^6.26.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.17.0",
+    "jest": "^24.9.0",
+    "jest-fetch-mock": "^3.0.0",
+    "jsdoc": "^3.6.3",
+    "lint-staged": "^9.5.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.19.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-test-renderer": "^16.12.0"
+  },
+  "peerDependencies": {
+    "react": "^16.12.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}

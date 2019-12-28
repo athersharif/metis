@@ -1,0 +1,15 @@
+.DS_Store
+coverage/
+docs/
+node_modules/
+example/
+src/__tests__/
+src/setupTests.js
+
+Makefile
+CONTRIBUTING.md
+jsdoc.conf.json
+.eslintrc
+.babelrc
+.gitignore
+.travis.yml
