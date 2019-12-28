@@ -16,4 +16,4 @@ Home.propTypes = {
   })
 };
 
-export default withGoogleSheets(Home);
+export default withGoogleSheets('sheetName')(Home);
