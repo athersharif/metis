@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import flowRight from 'lodash/flowRight';
 import withGoogleSheets from '../withGoogleSheets';
 
 const Component = () => <div />;
@@ -9,16 +8,25 @@ const WrappedComponent = withGoogleSheets('sheetName')(Component);
 
 describe('withGoogleSheets', () => {
   it('should render the DefaultLoadErrorComponent when no context and no load error component specified', () => {
-    const context = { db: undefined };
+    console.error = jest.fn();
+    const context = {
+      db: undefined,
+      error: {
+        code: 400,
+        message: 'some error'
+      }
+    };
 
     const component = mount(<WrappedComponent />, { context });
 
     const loadErrorComponent = component.find('DefaultLoadErrorComponent');
+    expect(console.error).toHaveBeenCalledWith(context.error);
 
     expect(loadErrorComponent.exists()).toBe(true);
   });
 
   it('should render the DefaultLoadErrorComponent per config when no context and no load error component specified', () => {
+    console.error = jest.fn();
     const config = {
       dataLoadError: {
         className: 'my-custom-title',
@@ -27,7 +35,13 @@ describe('withGoogleSheets', () => {
       }
     };
     const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
-    const context = { db: undefined };
+    const context = {
+      db: undefined,
+      error: {
+        code: 400,
+        message: 'some error'
+      }
+    };
 
     const component = mount(<WrappedComponent />, { context });
 
@@ -35,6 +49,7 @@ describe('withGoogleSheets', () => {
 
     expect(loadErrorComponent.exists()).toBe(true);
     expect(loadErrorComponent.prop('config')).toEqual(config.dataLoadError);
+    expect(console.error).toHaveBeenCalledWith(context.error);
 
     component.unmount();
   });
@@ -46,11 +61,18 @@ describe('withGoogleSheets', () => {
       }
     };
     const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
-    const context = { db: undefined };
+    const context = {
+      db: undefined,
+      error: {
+        code: 400,
+        message: 'some error'
+      }
+    };
 
     const component = mount(<WrappedComponent />, { context });
 
     expect(component.find('CustomLoadErrorComponent').exists()).toBe(true);
+    expect(console.error).toHaveBeenCalledWith(context.error);
 
     component.unmount();
   });
@@ -72,7 +94,7 @@ describe('withGoogleSheets', () => {
     component.unmount();
   });
 
-  it('should render the Component with appended data when context exists', () => {
+  it('should render the Component with multiple sheets data when array of sheet names is provided', () => {
     const context = {
       db: {
         sheetName: [{ id: 1 }],
@@ -80,10 +102,49 @@ describe('withGoogleSheets', () => {
       }
     };
 
-    const WrappedComponent = flowRight(
-      withGoogleSheets('sheetName'),
-      withGoogleSheets('someOtherSheet')
-    )(Component);
+    const WrappedComponent = withGoogleSheets(['sheetName', 'someOtherSheet'])(
+      Component
+    );
+
+    const component = mount(<WrappedComponent />, { context });
+
+    const mainComponent = component.find('Component');
+
+    expect(mainComponent.exists()).toBe(true);
+    expect(mainComponent.prop('db')).toEqual(context.db);
+
+    component.unmount();
+  });
+
+  it('should render the Component with all sheets data when * is provided', () => {
+    const context = {
+      db: {
+        sheetName: [{ id: 1 }],
+        someOtherSheet: [{ id: 4 }]
+      }
+    };
+
+    const WrappedComponent = withGoogleSheets('*')(Component);
+
+    const component = mount(<WrappedComponent />, { context });
+
+    const mainComponent = component.find('Component');
+
+    expect(mainComponent.exists()).toBe(true);
+    expect(mainComponent.prop('db')).toEqual(context.db);
+
+    component.unmount();
+  });
+
+  it('should render the Component with all sheets data when no argument is provided', () => {
+    const context = {
+      db: {
+        sheetName: [{ id: 1 }],
+        someOtherSheet: [{ id: 4 }]
+      }
+    };
+
+    const WrappedComponent = withGoogleSheets()(Component);
 
     const component = mount(<WrappedComponent />, { context });
 
@@ -102,10 +163,7 @@ describe('withGoogleSheets', () => {
       }
     };
 
-    const WrappedComponent = flowRight(
-      withGoogleSheets('sheetName'),
-      withGoogleSheets(null)
-    )(Component);
+    const WrappedComponent = withGoogleSheets(['sheetName', null])(Component);
     const component = mount(<WrappedComponent />, { context });
 
     const mainComponent = component.find('Component');
@@ -117,22 +175,26 @@ describe('withGoogleSheets', () => {
   });
 
   it("should render the Component with unchanged results when sheet doesn't exist", () => {
+    console.error = jest.fn();
     const context = {
       db: {
         sheetName: [{ id: 1 }]
       }
     };
 
-    const WrappedComponent = flowRight(
-      withGoogleSheets('sheetName'),
-      withGoogleSheets('someSheetThatDoesntExist')
-    )(Component);
+    const WrappedComponent = withGoogleSheets([
+      'sheetName',
+      'someSheetThatDoesntExist'
+    ])(Component);
     const component = mount(<WrappedComponent />, { context });
 
     const mainComponent = component.find('Component');
 
     expect(mainComponent.exists()).toBe(true);
     expect(mainComponent.prop('db')).toEqual(context.db);
+    expect(console.error).toHaveBeenCalledWith(
+      '[METIS]: data for someSheetThatDoesntExist was empty'
+    );
 
     component.unmount();
   });

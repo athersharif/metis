@@ -1,10 +1,10 @@
 {
   "name": "react-db-google-sheets",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "React HOC for using Google Sheets as Database",
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel src --ignore src/setupTests.js,src/__tests__ --out-dir dist",
+    "build": "babel src --ignore src/setupTests.js,src/__tests__ --out-dir dist --no-comments",
     "docs": "jsdoc -c jsdoc.conf.json -d docs/ src/*.js",
     "lint": "eslint src/",
     "lint-staged": "lint-staged",

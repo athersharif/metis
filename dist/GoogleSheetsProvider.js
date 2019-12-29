@@ -49,14 +49,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/**
- *
- * Provider for the React App
- *
- */
-var GoogleSheetsProvider =
-/*#__PURE__*/
-function (_Component) {
+var GoogleSheetsProvider = function (_Component) {
   _inherits(GoogleSheetsProvider, _Component);
 
   function GoogleSheetsProvider() {
@@ -77,26 +70,31 @@ function (_Component) {
         var id = sheet.properties.title,
             data = sheet.data;
 
-        var _data$0$rowData = _toArray(data[0].rowData),
-            headerRow = _data$0$rowData[0],
-            records = _data$0$rowData.slice(1);
+        if (data[0].rowData) {
+          var _data$0$rowData = _toArray(data[0].rowData),
+              headerRow = _data$0$rowData[0],
+              records = _data$0$rowData.slice(1);
 
-        headerRow = (0, _flatMap["default"])(headerRow.values, function (row) {
-          return row.formattedValue;
-        });
-        result = _objectSpread({}, result, _defineProperty({}, id, records.map(function (record) {
-          var result = {};
-          headerRow.forEach(function (value, index) {
-            result = _objectSpread(_defineProperty({}, value, record.values[index] ? record.values[index].formattedValue : null), result);
+          headerRow = (0, _flatMap["default"])(headerRow.values, function (row) {
+            return row.formattedValue;
           });
-          return result;
-        })));
+          result = _objectSpread({}, result, _defineProperty({}, id, records.map(function (record) {
+            var result = {};
+            headerRow.forEach(function (value, index) {
+              result = _objectSpread(_defineProperty({}, value, record.values[index] ? record.values[index].formattedValue : null), result);
+            });
+            return result;
+          })));
+        } else {
+          result = _objectSpread({}, result, _defineProperty({}, id, null));
+        }
       });
       return result;
     });
 
     _this.state = {
-      db: null
+      db: null,
+      error: null
     };
     return _this;
   }
@@ -109,30 +107,34 @@ function (_Component) {
       fetch(this.getUrl()).then(function (response) {
         return response.json();
       }).then(function (data) {
-        return _this2.setState({
-          db: _this2.processData(data)
-        });
+        if (data.error) {
+          _this2.setState({
+            error: data.error
+          });
+        } else {
+          _this2.setState({
+            db: _this2.processData(data)
+          });
+        }
       })["catch"](function (error) {
-        return console.log(error);
+        return console.error(error);
       });
     }
   }, {
     key: "getChildContext",
     value: function getChildContext() {
+      var _this$state = this.state,
+          db = _this$state.db,
+          error = _this$state.error;
       return {
-        db: this.state.db
+        db: db,
+        error: error
       };
     }
-    /**
-     *
-     * Constructs and returns the URL for Google Sheets API. Uses the Google Sheets ID and API key from the `REACT_APP_GOOGLE_SHEETS_DOC_ID` and `REACT_APP_GOOGLE_SHEETS_API_KEY` environment variables respectively. The environment variables should be declared as per the [Create React App guidelines](https://create-react-app.dev/docs/adding-custom-environment-variables/).
-     *
-     */
-
   }, {
     key: "render",
     value: function render() {
-      return this.state.db ? this.props.children : _react["default"].createElement("div", null, "Loading...");
+      return this.state.db || this.state.error ? this.props.children : _react["default"].createElement("div", null, "Loading...");
     }
   }]);
 
@@ -144,7 +146,8 @@ _defineProperty(GoogleSheetsProvider, "propTypes", {
 });
 
 _defineProperty(GoogleSheetsProvider, "childContextTypes", {
-  db: _propTypes["default"].object
+  db: _propTypes["default"].object,
+  error: _propTypes["default"].object
 });
 
 var _default = GoogleSheetsProvider;
