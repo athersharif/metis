@@ -1,8 +1,8 @@
-# react-db-google-sheets
+# Metis
 
 Higher-Order Component (HOC) for React that allows using Google Sheets as a Database.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/react-db-google-sheets/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-db-google-sheets.svg?style=flat)](https://www.npmjs.com/package/react-db-google-sheets) [![Travis](https://travis-ci.org/athersharif/react-db-google-sheets.svg?branch=master)](https://travis-ci.org/athersharif/react-db-google-sheets)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/metis/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-db-google-sheets.svg?style=flat)](https://www.npmjs.com/package/react-db-google-sheets) [![Travis](https://travis-ci.org/athersharif/metis.svg?branch=master)](https://travis-ci.org/athersharif/metis)
 
 ## Installation
 
@@ -20,9 +20,7 @@ import GoogleSheetsProvider from 'react-db-google-sheets';
 
 const App = () => (
   <GoogleSheetsProvider>
-    <MyApp>
-      ...
-    </MyApp>
+    <MyApp />
   </GoogleSheetsProvider>
 );
 
@@ -40,7 +38,7 @@ import { withGoogleSheets } from 'react-db-google-sheets';
 
 const Hello = props => (
   <div>
-    {props.db.sheetName.map(data => (
+    {props.db.sheet1.map(data => (
       <span>{data.id}</span>
     ))}
   </div>
@@ -175,7 +173,7 @@ To generate coverage report:
 
 ### Docs
 
-[JSDoc](https://github.com/jsdoc/jsdoc) is used for documentation. It's important to follow the guidelines for JSDoc to add informative and descriptive comments and documentation to the code. Documentation can be found [here](https://athersharif.github.io/react-db-google-sheets/).
+[JSDoc](https://github.com/jsdoc/jsdoc) is used for documentation. It's important to follow the guidelines for JSDoc to add informative and descriptive comments and documentation to the code. Documentation can be found [here](https://athersharif.github.io/metis/).
 
 Command: `make docs` / `npm run docs`
 
@@ -193,8 +191,8 @@ Command: `make build` / `npm run prepublish`
 
 ## Contributing
 
-Pull requests are welcome and appreciated. Contributing guidelines can be found [here](https://github.com/athersharif/react-db-google-sheets/blob/master/CONTRIBUTING.md).
+Pull requests are welcome and appreciated. Contributing guidelines can be found [here](https://github.com/athersharif/metis/blob/master/CONTRIBUTING.md).
 
 ## License
 
-Licensed under MIT. Can be found [here](https://github.com/athersharif/react-db-google-sheets/blob/master/LICENSE).
+Licensed under MIT. Can be found [here](https://github.com/athersharif/metis/blob/master/LICENSE).

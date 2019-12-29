@@ -4,7 +4,7 @@ Thank you for contributing to this project! Your feedback, comments, proposed so
 
 ## Issues
 
-If you come across an issue that you'd like fixed or propose a solution, the best way to do this is to create a Github issue [here](https://github.com/athersharif/react-db-google-sheets/issues). Adding labels is an icing on the cake!
+If you come across an issue that you'd like fixed or propose a solution, the best way to do this is to create a Github issue [here](https://github.com/athersharif/metis/issues). Adding labels is an icing on the cake!
 
 ## Pull Requests
 
@@ -14,15 +14,15 @@ If you'd like to add functionality to this project and propose a fix for an issu
 
 You can fork the repo by clicking on the fork button at the top right of the repo page. Once forked, you can clone your fork on your local by doing the following using cli:
 
-`git clone https://github.com/<your-github-username>/react-db-google-sheets.git`
+`git clone https://github.com/<your-github-username>/metis.git`
 
 ### 2. Adding origin and remote branches
 
 In order to keep track and push to the base branch, you can add the origin and remote branch by doing the following using cli:
 
-`git remote add origin https://github.com/<your-github-username>/react-db-google-sheets.git`
+`git remote add origin https://github.com/<your-github-username>/metis.git`
 
-`git remote add upstream https://github.com/athersharif/react-db-google-sheets.git`
+`git remote add upstream https://github.com/athersharif/metis.git`
 
 ### 3. Making changes
 

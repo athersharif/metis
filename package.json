@@ -1,6 +1,6 @@
 {
   "name": "react-db-google-sheets",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "React HOC for using Google Sheets as Database",
   "main": "dist/index.js",
   "scripts": {
@@ -14,12 +14,9 @@
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/athersharif/react-db-google-sheets.git"
+    "url": "https://github.com/athersharif/metis.git"
   },
   "keywords": [
     "react",

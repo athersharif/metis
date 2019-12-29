@@ -15,7 +15,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
  *
  * Default Load Error Component when unable to fetch Google Sheets results
  *
- * react-db-google-sheets <https://github.com/athersharif/react-db-google-sheets>
+ * metis <https://github.com/athersharif/metis>
  *
  * Copyright (c) 2019-Present, Ather Sharif.
  * Released under the MIT License.

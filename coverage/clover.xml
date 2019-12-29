@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1577435707363" clover="3.2.0">
-  <project timestamp="1577435707363" name="All files">
+<coverage generated="1577588265459" clover="3.2.0">
+  <project timestamp="1577588265461" name="All files">
     <metrics statements="42" coveredstatements="42" conditionals="23" coveredconditionals="23" methods="17" coveredmethods="17" elements="82" coveredelements="82" complexity="0" loc="42" ncloc="42" packages="1" files="3" classes="3"/>
-    <file name="DefaultLoadErrorComponent.js" path="/Users/athersharif/dev/react-db-google-sheets/src/DefaultLoadErrorComponent.js">
+    <file name="DefaultLoadErrorComponent.js" path="/Users/athersharif/dev/metis/src/DefaultLoadErrorComponent.js">
       <metrics statements="5" coveredstatements="5" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
       <line num="19" count="2" type="stmt"/>
-      <line num="36" count="2" type="stmt"/>
-      <line num="37" count="8" type="cond" truecount="2" falsecount="0"/>
-      <line num="43" count="2" type="stmt"/>
-      <line num="51" count="2" type="stmt"/>
+      <line num="35" count="2" type="stmt"/>
+      <line num="36" count="8" type="cond" truecount="2" falsecount="0"/>
+      <line num="42" count="2" type="stmt"/>
+      <line num="50" count="2" type="stmt"/>
     </file>
-    <file name="GoogleSheetsProvider.js" path="/Users/athersharif/dev/react-db-google-sheets/src/GoogleSheetsProvider.js">
+    <file name="GoogleSheetsProvider.js" path="/Users/athersharif/dev/metis/src/GoogleSheetsProvider.js">
       <metrics statements="24" coveredstatements="24" conditionals="4" coveredconditionals="4" methods="13" coveredmethods="13"/>
-      <line num="16" count="1" type="stmt"/>
-      <line num="20" count="1" type="stmt"/>
-      <line num="25" count="2" type="stmt"/>
-      <line num="26" count="2" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="25" count="1" type="stmt"/>
       <line num="30" count="2" type="stmt"/>
-      <line num="31" count="1" type="stmt"/>
-      <line num="32" count="1" type="stmt"/>
-      <line num="33" count="1" type="stmt"/>
-      <line num="37" count="4" type="stmt"/>
-      <line num="40" count="2" type="stmt"/>
-      <line num="41" count="2" type="stmt"/>
-      <line num="43" count="2" type="stmt"/>
-      <line num="44" count="1" type="stmt"/>
-      <line num="46" count="1" type="stmt"/>
-      <line num="50" count="1" type="stmt"/>
-      <line num="51" count="1" type="stmt"/>
-      <line num="52" count="2" type="stmt"/>
-      <line num="53" count="1" type="stmt"/>
-      <line num="56" count="1" type="stmt"/>
-      <line num="58" count="1" type="stmt"/>
-      <line num="59" count="2" type="stmt"/>
-      <line num="67" count="1" type="stmt"/>
-      <line num="72" count="1" type="stmt"/>
-      <line num="76" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="31" count="2" type="stmt"/>
+      <line num="35" count="2" type="stmt"/>
+      <line num="36" count="1" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="38" count="1" type="stmt"/>
+      <line num="42" count="4" type="stmt"/>
+      <line num="50" count="2" type="stmt"/>
+      <line num="51" count="2" type="stmt"/>
+      <line num="61" count="2" type="stmt"/>
+      <line num="62" count="1" type="stmt"/>
+      <line num="64" count="1" type="stmt"/>
+      <line num="68" count="1" type="stmt"/>
+      <line num="69" count="1" type="stmt"/>
+      <line num="70" count="2" type="stmt"/>
+      <line num="71" count="1" type="stmt"/>
+      <line num="74" count="1" type="stmt"/>
+      <line num="76" count="1" type="stmt"/>
+      <line num="77" count="2" type="stmt"/>
+      <line num="85" count="1" type="stmt"/>
+      <line num="90" count="1" type="stmt"/>
+      <line num="94" count="3" type="cond" truecount="2" falsecount="0"/>
     </file>
-    <file name="withGoogleSheets.js" path="/Users/athersharif/dev/react-db-google-sheets/src/withGoogleSheets.js">
+    <file name="withGoogleSheets.js" path="/Users/athersharif/dev/metis/src/withGoogleSheets.js">
       <metrics statements="13" coveredstatements="13" conditionals="13" coveredconditionals="13" methods="3" coveredmethods="3"/>
       <line num="29" count="9" type="cond" truecount="1" falsecount="0"/>
       <line num="30" count="9" type="stmt"/>
