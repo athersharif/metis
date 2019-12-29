@@ -23,23 +23,35 @@ class GoogleSheetsProvider extends Component {
   };
 
   static childContextTypes = {
-    db: PropTypes.object
+    db: PropTypes.object,
+    error: PropTypes.object
   };
 
   constructor() {
     super();
-    this.state = { db: null };
+    this.state = {
+      db: null,
+      error: null
+    };
   }
 
   componentDidMount() {
     fetch(this.getUrl())
       .then(response => response.json())
-      .then(data => this.setState({ db: this.processData(data) }))
-      .catch(error => console.log(error));
+      .then(data => {
+        if (data.error) {
+          this.setState({ error: data.error });
+        } else {
+          this.setState({ db: this.processData(data) });
+        }
+      })
+      .catch(error => console.error(error));
   }
 
   getChildContext() {
-    return { db: this.state.db };
+    const { db, error } = this.state;
+
+    return { db, error };
   }
 
   /**
@@ -66,32 +78,44 @@ class GoogleSheetsProvider extends Component {
         properties: { title: id },
         data
       } = sheet;
-      let [headerRow, ...records] = data[0].rowData;
-      headerRow = flatMap(headerRow.values, row => row.formattedValue);
-      result = {
-        ...result,
-        [id]: records.map(record => {
-          let result = {};
 
-          headerRow.forEach((value, index) => {
-            result = {
-              [value]: record.values[index]
-                ? record.values[index].formattedValue
-                : null,
-              ...result
-            };
-          });
+      if (data[0].rowData) {
+        let [headerRow, ...records] = data[0].rowData;
+        headerRow = flatMap(headerRow.values, row => row.formattedValue);
+        result = {
+          ...result,
+          [id]: records.map(record => {
+            let result = {};
 
-          return result;
-        })
-      };
+            headerRow.forEach((value, index) => {
+              result = {
+                [value]: record.values[index]
+                  ? record.values[index].formattedValue
+                  : null,
+                ...result
+              };
+            });
+
+            return result;
+          })
+        };
+      } else {
+        result = {
+          ...result,
+          [id]: null
+        };
+      }
     });
 
     return result;
   };
 
   render() {
-    return this.state.db ? this.props.children : <div>Loading...</div>;
+    return this.state.db || this.state.error ? (
+      this.props.children
+    ) : (
+      <div>Loading...</div>
+    );
   }
 }
 

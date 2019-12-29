@@ -11,13 +11,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import isArray from 'lodash/isArray';
 import DefaultLoadErrorComponent from './DefaultLoadErrorComponent';
 
 /**
  *
  * Higher-Order Component to fetch data from Google Sheets.
  *
- * @param {string} sheet The name of the Google Sheets sheet.
+ * @param {(string|array)} sheets The name of the Google Sheets sheet.
  * @param {object} [config={}] The config for the HOC
  * @param {object} [config.dataLoadError={}] The config for the Load Error Component.
  * @param {function} [config.dataLoadError.component] The custom component to render when unable to fetch from Google Sheets.
@@ -26,7 +27,7 @@ import DefaultLoadErrorComponent from './DefaultLoadErrorComponent';
  * @param {string} [config.dataLoadError.title="Data Load Error"] The title to display, rendered as an `H1` tag
  *
  */
-const withGoogleSheets = (sheet, config = {}) => WrappedComponent =>
+const withGoogleSheets = (sheets = '*', config = {}) => WrappedComponent =>
   class extends Component {
     displayName = 'DBGoogleSheets';
 
@@ -35,17 +36,51 @@ const withGoogleSheets = (sheet, config = {}) => WrappedComponent =>
     };
 
     static contextTypes = {
-      db: PropTypes.object
+      db: PropTypes.object,
+      error: PropTypes.object
     };
 
     render() {
       let result = this.props.db || {};
-      const { db } = this.context;
+      const { db, error } = this.context;
 
-      const data = get(db, sheet);
+      if (error) {
+        console.error(error);
 
-      if (data) {
-        result[sheet] = data;
+        config = {
+          ...config,
+          dataLoadError: {
+            ...(config.dataLoadError || {}),
+            title:
+              config.dataLoadError && config.dataLoadError.title
+                ? config.dataLoadError.title
+                : `Data Load Error: HTTP Status: ${error.code}`,
+            message:
+              config.dataLoadError && config.dataLoadError.message
+                ? config.dataLoadError.message
+                : error.message
+          }
+        };
+      } else {
+        if (sheets === '*') {
+          result = db;
+        } else {
+          if (!isArray(sheets)) {
+            sheets = [sheets];
+          }
+
+          sheets
+            .filter(s => s)
+            .forEach(sheet => {
+              const data = get(db, sheet);
+
+              if (data) {
+                result[sheet] = data;
+              } else {
+                console.error(`[METIS]: data for ${sheet} was empty`);
+              }
+            });
+        }
       }
 
       const errorComponentConfig = config.dataLoadError || {};

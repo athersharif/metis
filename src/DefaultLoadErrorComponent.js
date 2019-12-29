@@ -28,8 +28,8 @@ const DEFAULTS = {
  *
  * @param {object} [config={}] The config for the Component
  * @param {string} [config.className="data-load-error"] The class name of the Component for custom styling and control.
- * @param {string} [config.message="An error occurred fetching records from Google Sheets"] The error message to display when unable to fetch results, rendered as a `P` tag.
- * @param {string} [config.title="Data Load Error"] The title to display, rendered as an `H1` tag
+ * @param {string} [config.message="[error message returned from the error response]"] The error message to display when unable to fetch results, rendered as a `P` tag.
+ * @param {string} [config.title="Data Load Error: HTTP Status: [error code returned from error response]"] The title to display, rendered as an `H1` tag
  *
  */
 const DefaultLoadErrorComponent = ({ config }) => (

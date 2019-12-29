@@ -46,7 +46,7 @@ const Hello = props => (
 
 Hello.propTypes = {
   db: PropTypes.shape({
-    sheetName: PropTypes.arrayOf(PropTypes.object)
+    sheet1: PropTypes.arrayOf(PropTypes.object)
   })
 };
 
@@ -55,17 +55,23 @@ export default withGoogleSheets('sheet1')(Hello);
 
 #### Fetching data from multiple sheets
 
-`withGoogleSheets`, at present, only takes a single sheet name as an argument. However, to access data from multiple sheets, one can use `withGoogleSheets` as many times as needed using `compose` from [`recompose`](https://github.com/acdlite/recompose) or [`redux`](https://redux.js.org/), or even `flow`/`flowRight` from [`lodash`](https://lodash.com/).
+`withGoogleSheets`, can either take a single sheet name or an array of sheet names as an argument. 
 
 ```
-export default flowRight(
-  withGoogleSheets('sheet1'),
-  withGoogleSheets('sheet2'),
-  withGoogleSheets('sheet3')    
-)(Hello);
+export default withGoogleSheets(['sheet1', 'sheet2', 'sheet3'])(Hello);
 ```
 
-If you want data from all the sheets, it's better to use `db` from using React's context.
+Fetching data from all sheets is also supported by passing `*` as the argument. Passing no argument defaults to this as well.
+
+```
+export default withGoogleSheets('*')(Hello);
+```
+
+or
+
+```
+export default withGoogleSheets()(Hello);
+```
 
 #### Error fetching data
 
@@ -89,8 +95,8 @@ This component uses the following defaults:
 ```
 const DEFAULTS = {
   className: 'data-load-error',
-  message: 'An error occurred fetching records from Google Sheets',
-  title: 'Data Load Error'
+  message: [error message returned from the error response],
+  title: 'Data Load Error: HTTP Status: [error code returned from error response]'
 };
 ```
 
