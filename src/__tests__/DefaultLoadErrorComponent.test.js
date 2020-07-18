@@ -77,7 +77,7 @@ describe('DefaultLoadErrorComponent', () => {
     const config = {
       className: 'my-custom-title',
       message: 'my custom error message',
-      title: 'My Custom Title'
+      title: 'My Custom Title',
     };
 
     const component = mount(<DefaultLoadErrorComponent config={config} />);

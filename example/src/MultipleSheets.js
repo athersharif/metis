@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
  */
 import { withGoogleSheets } from '../../dist';
 
-const MultipleSheets = props => (
+const MultipleSheets = (props) => (
   <div>
     <table className="table">
       <thead>
@@ -23,7 +23,7 @@ const MultipleSheets = props => (
         </tr>
       </thead>
       <tbody>
-        {props.db.samplesheet.map(data => (
+        {props.db.samplesheet.map((data) => (
           <tr key={data.id}>
             <td>{data.id}</td>
             <td>{data.name}</td>
@@ -43,7 +43,7 @@ const MultipleSheets = props => (
         </tr>
       </thead>
       <tbody>
-        {props.db.anothersheet.map(data => (
+        {props.db.anothersheet.map((data) => (
           <tr key={data.id}>
             <td>{data.id}</td>
             <td>{data.team_name}</td>
@@ -60,8 +60,8 @@ const MultipleSheets = props => (
 MultipleSheets.propTypes = {
   db: PropTypes.shape({
     anothersheet: PropTypes.arrayOf(PropTypes.object),
-    samplesheet: PropTypes.arrayOf(PropTypes.object)
-  })
+    samplesheet: PropTypes.arrayOf(PropTypes.object),
+  }),
 };
 
 export default withGoogleSheets(['anothersheet', 'samplesheet'])(

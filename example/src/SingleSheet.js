@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
  */
 import { withGoogleSheets } from '../../dist';
 
-const SingleSheet = props => (
+const SingleSheet = (props) => (
   <table className="table">
     <thead>
       <tr>
@@ -22,7 +22,7 @@ const SingleSheet = props => (
       </tr>
     </thead>
     <tbody>
-      {props.db.samplesheet.map(data => (
+      {props.db.samplesheet.map((data) => (
         <tr key={data.id}>
           <td>{data.id}</td>
           <td>{data.name}</td>
@@ -35,8 +35,8 @@ const SingleSheet = props => (
 
 SingleSheet.propTypes = {
   db: PropTypes.shape({
-    samplesheet: PropTypes.arrayOf(PropTypes.object)
-  })
+    samplesheet: PropTypes.arrayOf(PropTypes.object),
+  }),
 };
 
 export default withGoogleSheets('samplesheet')(SingleSheet);

@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 const DEFAULTS = {
   className: 'data-load-error',
   message: 'An error occurred fetching records from Google Sheets',
-  title: 'Data Load Error'
+  title: 'Data Load Error',
 };
 
 /**
@@ -43,12 +43,12 @@ DefaultLoadErrorComponent.propTypes = {
   config: PropTypes.shape({
     className: PropTypes.string,
     message: PropTypes.string,
-    title: PropTypes.string
-  })
+    title: PropTypes.string,
+  }),
 };
 
 DefaultLoadErrorComponent.defaultProps = {
-  config: DEFAULTS
+  config: DEFAULTS,
 };
 
 export default DefaultLoadErrorComponent;

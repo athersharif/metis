@@ -19,33 +19,33 @@ import flatMap from 'lodash/flatMap';
  */
 class GoogleSheetsProvider extends Component {
   static propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   static childContextTypes = {
     db: PropTypes.object,
-    error: PropTypes.object
+    error: PropTypes.object,
   };
 
   constructor() {
     super();
     this.state = {
       db: null,
-      error: null
+      error: null,
     };
   }
 
   componentDidMount() {
     fetch(this.getUrl())
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.error) {
           this.setState({ error: data.error });
         } else {
           this.setState({ db: this.processData(data) });
         }
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   }
 
   getChildContext() {
@@ -73,18 +73,18 @@ class GoogleSheetsProvider extends Component {
   processData = ({ sheets }) => {
     let result = {};
 
-    sheets.forEach(sheet => {
+    sheets.forEach((sheet) => {
       const {
         properties: { title: id },
-        data
+        data,
       } = sheet;
 
       if (data[0].rowData) {
         let [headerRow, ...records] = data[0].rowData;
-        headerRow = flatMap(headerRow.values, row => row.formattedValue);
+        headerRow = flatMap(headerRow.values, (row) => row.formattedValue);
         result = {
           ...result,
-          [id]: records.map(record => {
+          [id]: records.map((record) => {
             let result = {};
 
             headerRow.forEach((value, index) => {
@@ -92,17 +92,17 @@ class GoogleSheetsProvider extends Component {
                 [value]: record.values[index]
                   ? record.values[index].formattedValue
                   : null,
-                ...result
+                ...result,
               };
             });
 
             return result;
-          })
+          }),
         };
       } else {
         result = {
           ...result,
-          [id]: null
+          [id]: null,
         };
       }
     });

@@ -13,8 +13,8 @@ describe('withGoogleSheets', () => {
       db: undefined,
       error: {
         code: 400,
-        message: 'some error'
-      }
+        message: 'some error',
+      },
     };
 
     const component = mount(<WrappedComponent />, { context });
@@ -31,16 +31,16 @@ describe('withGoogleSheets', () => {
       dataLoadError: {
         className: 'my-custom-title',
         message: 'my custom error message',
-        title: 'My Custom Title'
-      }
+        title: 'My Custom Title',
+      },
     };
     const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
     const context = {
       db: undefined,
       error: {
         code: 400,
-        message: 'some error'
-      }
+        message: 'some error',
+      },
     };
 
     const component = mount(<WrappedComponent />, { context });
@@ -57,16 +57,16 @@ describe('withGoogleSheets', () => {
   it('should render the CustomLoadErrorComponent per config when no context and load error component specified', () => {
     const config = {
       dataLoadError: {
-        component: CustomLoadErrorComponent
-      }
+        component: CustomLoadErrorComponent,
+      },
     };
     const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
     const context = {
       db: undefined,
       error: {
         code: 400,
-        message: 'some error'
-      }
+        message: 'some error',
+      },
     };
 
     const component = mount(<WrappedComponent />, { context });
@@ -80,8 +80,8 @@ describe('withGoogleSheets', () => {
   it('should render the Component when context exists', () => {
     const context = {
       db: {
-        sheetName: [{ id: 1 }]
-      }
+        sheetName: [{ id: 1 }],
+      },
     };
 
     const component = mount(<WrappedComponent />, { context });
@@ -98,8 +98,8 @@ describe('withGoogleSheets', () => {
     const context = {
       db: {
         sheetName: [{ id: 1 }],
-        someOtherSheet: [{ id: 4 }]
-      }
+        someOtherSheet: [{ id: 4 }],
+      },
     };
 
     const WrappedComponent = withGoogleSheets(['sheetName', 'someOtherSheet'])(
@@ -120,8 +120,8 @@ describe('withGoogleSheets', () => {
     const context = {
       db: {
         sheetName: [{ id: 1 }],
-        someOtherSheet: [{ id: 4 }]
-      }
+        someOtherSheet: [{ id: 4 }],
+      },
     };
 
     const WrappedComponent = withGoogleSheets('*')(Component);
@@ -140,8 +140,8 @@ describe('withGoogleSheets', () => {
     const context = {
       db: {
         sheetName: [{ id: 1 }],
-        someOtherSheet: [{ id: 4 }]
-      }
+        someOtherSheet: [{ id: 4 }],
+      },
     };
 
     const WrappedComponent = withGoogleSheets()(Component);
@@ -159,8 +159,8 @@ describe('withGoogleSheets', () => {
   it('should render the Component with unchanged results when sheet empty', () => {
     const context = {
       db: {
-        sheetName: [{ id: 1 }]
-      }
+        sheetName: [{ id: 1 }],
+      },
     };
 
     const WrappedComponent = withGoogleSheets(['sheetName', null])(Component);
@@ -178,13 +178,13 @@ describe('withGoogleSheets', () => {
     console.error = jest.fn();
     const context = {
       db: {
-        sheetName: [{ id: 1 }]
-      }
+        sheetName: [{ id: 1 }],
+      },
     };
 
     const WrappedComponent = withGoogleSheets([
       'sheetName',
-      'someSheetThatDoesntExist'
+      'someSheetThatDoesntExist',
     ])(Component);
     const component = mount(<WrappedComponent />, { context });
 

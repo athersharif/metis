@@ -27,17 +27,17 @@ import DefaultLoadErrorComponent from './DefaultLoadErrorComponent';
  * @param {string} [config.dataLoadError.title="Data Load Error"] The title to display, rendered as an `H1` tag
  *
  */
-const withGoogleSheets = (sheets = '*', config = {}) => WrappedComponent =>
+const withGoogleSheets = (sheets = '*', config = {}) => (WrappedComponent) =>
   class extends Component {
     displayName = 'DBGoogleSheets';
 
     static propTypes = {
-      db: PropTypes.object
+      db: PropTypes.object,
     };
 
     static contextTypes = {
       db: PropTypes.object,
-      error: PropTypes.object
+      error: PropTypes.object,
     };
 
     render() {
@@ -58,8 +58,8 @@ const withGoogleSheets = (sheets = '*', config = {}) => WrappedComponent =>
             message:
               config.dataLoadError && config.dataLoadError.message
                 ? config.dataLoadError.message
-                : error.message
-          }
+                : error.message,
+          },
         };
       } else {
         if (sheets === '*') {
@@ -70,8 +70,8 @@ const withGoogleSheets = (sheets = '*', config = {}) => WrappedComponent =>
           }
 
           sheets
-            .filter(s => s)
-            .forEach(sheet => {
+            .filter((s) => s)
+            .forEach((sheet) => {
               const data = get(db, sheet);
 
               if (data) {
