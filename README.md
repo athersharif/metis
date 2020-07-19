@@ -173,6 +173,20 @@ const config = {
 withGoogleSheets('sheet1', config)(Hello);
 ```
 
+### Refreshing the data
+
+The `withGoogleSheets` HOC provides a `refetch` function as a prop that pulls in the latest data. For example, if your use case involves a refresh button, you can add the `refetch` function to the button's `onClick` method (also shown under examples):
+
+```
+const Hello = props => (
+  <div>
+    <button onClick={props.refetch}>Refresh</button>
+  </div>
+);
+
+export default withGoogleSheets('sheet1')(Hello);
+```
+
 ## Specifying DOC ID and API key
 
 The Google Sheets DOC ID and API key are needed to fetch data from Google Sheets. For security purposes, we recommend these variables to be set using the environment variables declared as per the [Create React App guidelines](https://create-react-app.dev/docs/adding-custom-environment-variables/). We recommend using the `.env` file (for security purposes, it's good practice to push a "sample" env file (`.env.sample`) to git instead of the actual `.env` file by adding the `.env` file to `.gitignore`). The DOC ID and API key can be set using the following two variables:

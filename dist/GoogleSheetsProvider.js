@@ -71,6 +71,28 @@ var GoogleSheetsProvider = function (_Component) {
 
     _this = _super.call(this);
 
+    _defineProperty(_assertThisInitialized(_this), "fetchData", function () {
+      fetch(_this.getUrl()).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        if (data.error) {
+          _this.setState({
+            error: data.error
+          });
+        } else {
+          _this.setState({
+            db: _this.processData(data)
+          });
+        }
+      })["catch"](function (error) {
+        return console.error(error);
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "refetch", function () {
+      return _this.fetchData();
+    });
+
     _defineProperty(_assertThisInitialized(_this), "getUrl", function () {
       return "https://sheets.googleapis.com/v4/spreadsheets/".concat(process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID, "?includeGridData=true&fields=sheets(data%2FrowData%2Fvalues%2FformattedValue%2Cproperties%2Ftitle)&key=").concat(process.env.REACT_APP_GOOGLE_SHEETS_API_KEY);
     });
@@ -114,23 +136,7 @@ var GoogleSheetsProvider = function (_Component) {
   _createClass(GoogleSheetsProvider, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
-      fetch(this.getUrl()).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        if (data.error) {
-          _this2.setState({
-            error: data.error
-          });
-        } else {
-          _this2.setState({
-            db: _this2.processData(data)
-          });
-        }
-      })["catch"](function (error) {
-        return console.error(error);
-      });
+      this.fetchData();
     }
   }, {
     key: "getChildContext",
@@ -140,7 +146,8 @@ var GoogleSheetsProvider = function (_Component) {
           error = _this$state.error;
       return {
         db: db,
-        error: error
+        error: error,
+        refetch: this.refetch
       };
     }
   }, {
@@ -165,7 +172,8 @@ _defineProperty(GoogleSheetsProvider, "propTypes", {
 
 _defineProperty(GoogleSheetsProvider, "childContextTypes", {
   db: _propTypes["default"].object,
-  error: _propTypes["default"].object
+  error: _propTypes["default"].object,
+  refetch: _propTypes["default"].func
 });
 
 var _default = GoogleSheetsProvider;

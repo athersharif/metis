@@ -84,7 +84,8 @@ var withGoogleSheets = function withGoogleSheets() {
           var result = this.props.db || {};
           var _this$context = this.context,
               db = _this$context.db,
-              error = _this$context.error;
+              error = _this$context.error,
+              refetch = _this$context.refetch;
 
           if (error) {
             console.error(error);
@@ -119,7 +120,8 @@ var withGoogleSheets = function withGoogleSheets() {
           var errorComponentConfig = config.dataLoadError || {};
           var LoadErrorComponent = errorComponentConfig.component ? errorComponentConfig.component : _DefaultLoadErrorComponent["default"];
           return db && result ? _react["default"].createElement(WrappedComponent, _extends({}, this.props, {
-            db: result
+            db: result,
+            refetch: refetch
           })) : _react["default"].createElement(LoadErrorComponent, {
             config: errorComponentConfig
           });
@@ -131,7 +133,8 @@ var withGoogleSheets = function withGoogleSheets() {
       db: _propTypes["default"].object
     }), _defineProperty(_class, "contextTypes", {
       db: _propTypes["default"].object,
-      error: _propTypes["default"].object
+      error: _propTypes["default"].object,
+      refetch: _propTypes["default"].func
     }), _temp;
   };
 };

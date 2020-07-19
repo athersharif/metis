@@ -54,6 +54,9 @@ const AllSheets = (props) => (
         ))}
       </tbody>
     </table>
+    <button className="btn btn-primary" onClick={props.refetch}>
+      Refresh
+    </button>
   </div>
 );
 
