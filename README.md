@@ -65,7 +65,7 @@ If you'd like to use your own component (say `CustomLoadingComponent`) instead o
 ```
 const CustomLoadingComponent = () => <div />;
 const config = {
-  dataLoadError: {
+  dataLoading: {
     component: CustomLoadingComponent
   }
 };
