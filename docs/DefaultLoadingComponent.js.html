@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: DefaultLoadErrorComponent.js</title>
+    <title>JSDoc: Source: DefaultLoadingComponent.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: DefaultLoadErrorComponent.js</h1>
+    <h1 class="page-title">Source: DefaultLoadingComponent.js</h1>
 
     
 
@@ -28,7 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  *
- * Default Load Error Component when unable to fetch Google Sheets results
+ * Default Loading Component when loading Google Sheets results
  *
  * metis &lt;https://github.com/athersharif/metis>
  *
@@ -41,45 +41,41 @@ import PropTypes from 'prop-types';
 
 /**
  *
- * Default values for arguments: `className`, `message`, `title`
+ * Default values for arguments: `className`, `text`
  *
  */
 const DEFAULTS = {
-  className: 'data-load-error',
-  message: 'An error occurred fetching records from Google Sheets',
-  title: 'Data Load Error',
+  className: 'data-loading',
+  text: 'Loading...',
 };
 
 /**
  *
- * A very basic and minimalist Component to render when unable to fetch results from Google Sheets
+ * A very basic and minimalist Component to render when loading results from Google Sheets
  *
  * @param {object} [config={}] The config for the Component
- * @param {string} [config.className="data-load-error"] The class name of the Component for custom styling and control.
- * @param {string} [config.message="[error message returned from the error response]"] The error message to display when unable to fetch results, rendered as a `P` tag.
- * @param {string} [config.title="Data Load Error: HTTP Status: [error code returned from error response]"] The title to display, rendered as an `H1` tag
+ * @param {string} [config.className="data-loading"] The class name of the Component for custom styling and control.
+ * @param {string} [config.text="[Loading...]"] The text to display when loading results, rendered as a `P` tag.
  *
  */
-const DefaultLoadErrorComponent = ({ config }) => (
+const DefaultLoadingComponent = ({ config }) => (
   &lt;div className={config.className || DEFAULTS.className}>
-    &lt;h1 className="title">{config.title || DEFAULTS.title}&lt;/h1>
-    &lt;p className="message">{config.message || DEFAULTS.message}&lt;/p>
+    &lt;p className="text">{config.text || DEFAULTS.text}&lt;/p>
   &lt;/div>
 );
 
-DefaultLoadErrorComponent.propTypes = {
+DefaultLoadingComponent.propTypes = {
   config: PropTypes.shape({
     className: PropTypes.string,
-    message: PropTypes.string,
-    title: PropTypes.string,
+    text: PropTypes.string,
   }),
 };
 
-DefaultLoadErrorComponent.defaultProps = {
+DefaultLoadingComponent.defaultProps = {
   config: DEFAULTS,
 };
 
-export default DefaultLoadErrorComponent;
+export default DefaultLoadingComponent;
 </code></pre>
         </article>
     </section>

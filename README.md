@@ -27,6 +27,54 @@ const App = () => (
 export default App;
 ```
 
+By default, a basic `DefaultLoadingComponent` is rendered in place of the Component. The `DefaultLoadingComponent` looks like this:
+
+```
+const DefaultLoadingComponent = ({ config }) => (
+  <div className={config.className || DEFAULTS.className}>
+    <p className="text">{config.text || DEFAULTS.text}</p>
+  </div>
+);
+```
+
+This component uses the following defaults:
+
+```
+const DEFAULTS = {
+  className: 'data-loading',
+  text: 'Loading...',
+};
+```
+
+It is possible to override these defaults by passing a `config` prop to `GoogleSheetsProvider`:
+
+```
+const config = {
+  dataLoading: {
+    className: 'my-custom-classname'
+  }
+};
+
+<GoogleSheetsProvider config={config}>
+ ...
+</GoogleSheetsProvider>
+```
+
+If you'd like to use your own component (say `CustomLoadingComponent`) instead of the default one:
+
+```
+const CustomLoadingComponent = () => <div />;
+const config = {
+  dataLoadError: {
+    component: CustomLoadingComponent
+  }
+};
+
+<GoogleSheetsProvider config={config}>
+ ...
+</GoogleSheetsProvider>
+```
+
 ### Component (say Hello.js)
 
 Use the `withGoogleSheets` HOC to fetch the data from a given sheet into your component, `Hello.js`:

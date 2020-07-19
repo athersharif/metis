@@ -11,15 +11,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import flatMap from 'lodash/flatMap';
+import DefaultLoadingComponent from './DefaultLoadingComponent';
 
 /**
  *
  * Provider for the React App
  *
+ * @param {object} [config={}] The config for the HOC
+ * @param {object} [config.dataLoading={}] The config for the Load Error Component.
+ * @param {function} [config.dataLoading.component] The custom component to render when loading results from Google Sheets.
+ * @param {string} [config.dataLoading.className="data-load-error"] The class name of the Component for custom styling and control.
+ * @param {string} [config.dataLoading.text="Loading..."] The text to display when loading results, rendered as a `P` tag.
+ *
  */
 class GoogleSheetsProvider extends Component {
   static propTypes = {
     children: PropTypes.node,
+    config: PropTypes.object,
   };
 
   static childContextTypes = {
@@ -111,10 +119,17 @@ class GoogleSheetsProvider extends Component {
   };
 
   render() {
+    const { config } = this.props;
+    const loadingComponentConfig =
+      config && config.dataLoading ? config.dataLoading : {};
+    const LoadingComponent = loadingComponentConfig.component
+      ? loadingComponentConfig.component
+      : DefaultLoadingComponent;
+
     return this.state.db || this.state.error ? (
       this.props.children
     ) : (
-      <div>Loading...</div>
+      <LoadingComponent config={loadingComponentConfig} />
     );
   }
 }

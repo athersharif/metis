@@ -11,6 +11,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _flatMap = _interopRequireDefault(require("lodash/flatMap"));
 
+var _DefaultLoadingComponent = _interopRequireDefault(require("./DefaultLoadingComponent"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -144,7 +146,12 @@ var GoogleSheetsProvider = function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return this.state.db || this.state.error ? this.props.children : _react["default"].createElement("div", null, "Loading...");
+      var config = this.props.config;
+      var loadingComponentConfig = config && config.dataLoading ? config.dataLoading : {};
+      var LoadingComponent = loadingComponentConfig.component ? loadingComponentConfig.component : _DefaultLoadingComponent["default"];
+      return this.state.db || this.state.error ? this.props.children : _react["default"].createElement(LoadingComponent, {
+        config: loadingComponentConfig
+      });
     }
   }]);
 
@@ -152,7 +159,8 @@ var GoogleSheetsProvider = function (_Component) {
 }(_react.Component);
 
 _defineProperty(GoogleSheetsProvider, "propTypes", {
-  children: _propTypes["default"].node
+  children: _propTypes["default"].node,
+  config: _propTypes["default"].object
 });
 
 _defineProperty(GoogleSheetsProvider, "childContextTypes", {

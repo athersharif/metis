@@ -1,51 +1,62 @@
+
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>Code coverage report for withGoogleSheets.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
             background-image: url(sort-arrow-sprite.png);
         }
     </style>
 </head>
+    
 <body>
 <div class='wrapper'>
-  <div class='pad1'>
-    <h1>
-      <a href="index.html">All files</a> withGoogleSheets.js
-    </h1>
-    <div class='clearfix'>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
-        <span class="quiet">Statements</span>
-        <span class='fraction'>24/24</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
-        <span class="quiet">Branches</span>
-        <span class='fraction'>30/30</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
-        <span class="quiet">Functions</span>
-        <span class='fraction'>5/5</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
-        <span class="quiet">Lines</span>
-        <span class='fraction'>23/23</span>
-      </div>
+    <div class='pad1'>
+        <h1><a href="index.html">All files</a> withGoogleSheets.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>24/24</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>30/30</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>5/5</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>23/23</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
     </div>
-    <p class="quiet">
-      Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
-    </p>
-  </div>
-  <div class='status-line high'></div>
-<pre><table class="coverage">
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -273,17 +284,17 @@ import DefaultLoadErrorComponent from './DefaultLoadErrorComponent';
  * @param {string} [config.dataLoadError.title="Data Load Error"] The title to display, rendered as an `H1` tag
  *
  */
-const withGoogleSheets = (sheets = '*', config = {}) =&gt; WrappedComponent =&gt;
+const withGoogleSheets = (sheets = '*', config = {}) =&gt; (WrappedComponent) =&gt;
   class extends Component {
     displayName = 'DBGoogleSheets';
 &nbsp;
     static propTypes = {
-      db: PropTypes.object
+      db: PropTypes.object,
     };
 &nbsp;
     static contextTypes = {
       db: PropTypes.object,
-      error: PropTypes.object
+      error: PropTypes.object,
     };
 &nbsp;
     render() {
@@ -304,8 +315,8 @@ const withGoogleSheets = (sheets = '*', config = {}) =&gt; WrappedComponent =&gt
             message:
               config.dataLoadError &amp;&amp; config.dataLoadError.message
                 ? config.dataLoadError.message
-                : error.message
-          }
+                : error.message,
+          },
         };
       } else {
         if (sheets === '*') {
@@ -316,8 +327,8 @@ const withGoogleSheets = (sheets = '*', config = {}) =&gt; WrappedComponent =&gt
           }
 &nbsp;
           sheets
-            .filter(s =&gt; s)
-            .forEach(sheet =&gt; {
+            .filter((s) =&gt; s)
+            .forEach((sheet) =&gt; {
               const data = get(db, sheet);
 &nbsp;
               if (data) {
@@ -343,24 +354,24 @@ const withGoogleSheets = (sheets = '*', config = {}) =&gt; WrappedComponent =&gt
   };
 &nbsp;
 export default withGoogleSheets;
-&nbsp;</pre></td></tr>
-</table></pre>
-<div class='push'></div><!-- for sticky footer -->
-</div><!-- /wrapper -->
-<div class='footer quiet pad2 space-top1 center small'>
-  Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Dec 29 2019 13:16:14 GMT-0800 (Pacific Standard Time)
-</div>
-</div>
-<script src="prettify.js"></script>
-<script>
-window.onload = function () {
-        if (typeof prettyPrint === 'function') {
-            prettyPrint();
-        }
-};
-</script>
-<script src="sorter.js"></script>
-<script src="block-navigation.js"></script>
-</body>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+                at Sat Jul 18 2020 18:35:06 GMT-0700 (Pacific Daylight Time)
+            </div>
+        </div>
+        <script src="prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
+    </body>
 </html>
+    
