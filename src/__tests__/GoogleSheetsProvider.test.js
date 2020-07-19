@@ -3,6 +3,8 @@ import { mount } from 'enzyme';
 import 'babel-polyfill';
 import GoogleSheetsProvider from '../GoogleSheetsProvider';
 
+const CustomLoadingComponent = () => <div />;
+
 const response = {
   sheets: [
     {
@@ -67,6 +69,7 @@ describe('GoogleSheetsProvider', () => {
         .getChildContext();
 
       expect(context).toEqual(result);
+      expect(component.find('DefaultLoadingComponent').exists()).toBe(true);
 
       done();
 
@@ -109,6 +112,59 @@ describe('GoogleSheetsProvider', () => {
 
     setImmediate(() => {
       expect(console.error).toHaveBeenCalledWith('some error');
+
+      done();
+
+      component.unmount();
+    });
+  });
+
+  it('should render the DefaultLoadingComponent per config when no context and no loading component specified', async (done) => {
+    const config = {
+      dataLoading: {
+        className: 'my-custom-title',
+        message: 'my custom error message',
+        title: 'My Custom Title',
+      },
+    };
+
+    fetch.mockResponseOnce(JSON.stringify(response));
+
+    const component = mount(
+      <GoogleSheetsProvider config={config}>
+        <div />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(() => {
+      const loadingComponent = component.find('DefaultLoadingComponent');
+
+      expect(loadingComponent.exists()).toBe(true);
+      expect(loadingComponent.prop('config')).toEqual(config.dataLoading);
+
+      done();
+
+      component.unmount();
+    });
+  });
+
+  it('should render the CustomLoadingComponent per config when no loading component specified', async (done) => {
+    const config = {
+      dataLoading: {
+        component: CustomLoadingComponent,
+      },
+    };
+
+    fetch.mockResponseOnce(JSON.stringify(response));
+
+    const component = mount(
+      <GoogleSheetsProvider config={config}>
+        <div />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(() => {
+      expect(component.find('CustomLoadingComponent').exists()).toBe(true);
 
       done();
 

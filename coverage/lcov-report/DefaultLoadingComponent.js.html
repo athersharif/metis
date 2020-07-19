@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for DefaultLoadErrorComponent.js</title>
+    <title>Code coverage report for DefaultLoadingComponent.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> DefaultLoadErrorComponent.js</h1>
+        <h1><a href="index.html">All files</a> DefaultLoadingComponent.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -107,11 +107,7 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,17 +139,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,7 +159,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  *
- * Default Load Error Component when unable to fetch Google Sheets results
+ * Default Loading Component when loading Google Sheets results
  *
  * metis &lt;https://github.com/athersharif/metis&gt;
  *
@@ -180,45 +172,41 @@ import PropTypes from 'prop-types';
 &nbsp;
 /**
  *
- * Default values for arguments: `className`, `message`, `title`
+ * Default values for arguments: `className`, `text`
  *
  */
 const DEFAULTS = {
-  className: 'data-load-error',
-  message: 'An error occurred fetching records from Google Sheets',
-  title: 'Data Load Error',
+  className: 'data-loading',
+  text: 'Loading...',
 };
 &nbsp;
 /**
  *
- * A very basic and minimalist Component to render when unable to fetch results from Google Sheets
+ * A very basic and minimalist Component to render when loading results from Google Sheets
  *
  * @param {object} [config={}] The config for the Component
- * @param {string} [config.className="data-load-error"] The class name of the Component for custom styling and control.
- * @param {string} [config.message="[error message returned from the error response]"] The error message to display when unable to fetch results, rendered as a `P` tag.
- * @param {string} [config.title="Data Load Error: HTTP Status: [error code returned from error response]"] The title to display, rendered as an `H1` tag
+ * @param {string} [config.className="data-loading"] The class name of the Component for custom styling and control.
+ * @param {string} [config.text="[Loading...]"] The text to display when loading results, rendered as a `P` tag.
  *
  */
-const DefaultLoadErrorComponent = ({ config }) =&gt; (
+const DefaultLoadingComponent = ({ config }) =&gt; (
   &lt;div className={config.className || DEFAULTS.className}&gt;
-    &lt;h1 className="title"&gt;{config.title || DEFAULTS.title}&lt;/h1&gt;
-    &lt;p className="message"&gt;{config.message || DEFAULTS.message}&lt;/p&gt;
+    &lt;p className="text"&gt;{config.text || DEFAULTS.text}&lt;/p&gt;
   &lt;/div&gt;
 );
 &nbsp;
-DefaultLoadErrorComponent.propTypes = {
+DefaultLoadingComponent.propTypes = {
   config: PropTypes.shape({
     className: PropTypes.string,
-    message: PropTypes.string,
-    title: PropTypes.string,
+    text: PropTypes.string,
   }),
 };
 &nbsp;
-DefaultLoadErrorComponent.defaultProps = {
+DefaultLoadingComponent.defaultProps = {
   config: DEFAULTS,
 };
 &nbsp;
-export default DefaultLoadErrorComponent;
+export default DefaultLoadingComponent;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
