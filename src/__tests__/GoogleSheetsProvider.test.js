@@ -29,12 +29,15 @@ const response = {
   ],
 };
 
+const refetch = jest.fn();
+
 const result = {
   db: {
     home: [{ id: '1', name: null }],
     emptysheet: null,
   },
   error: null,
+  refetch,
 };
 
 const errorResponse = {
@@ -42,6 +45,7 @@ const errorResponse = {
     code: 403,
     message: 'some error happened',
   },
+  refetch,  
 };
 
 const errorResult = {
@@ -50,6 +54,7 @@ const errorResult = {
     code: 403,
     message: 'some error happened',
   },
+  refetch,  
 };
 
 describe('GoogleSheetsProvider', () => {
@@ -68,7 +73,9 @@ describe('GoogleSheetsProvider', () => {
         .instance()
         .getChildContext();
 
-      expect(context).toEqual(result);
+      expect(context.db).toEqual(result.db);
+      expect(context.error).toEqual(result.error);      
+      expect(context.refetch).toEqual(expect.any(Function));
       expect(component.find('DefaultLoadingComponent').exists()).toBe(true);
 
       done();
@@ -92,7 +99,8 @@ describe('GoogleSheetsProvider', () => {
         .instance()
         .getChildContext();
 
-      expect(context).toEqual(errorResult);
+      expect(context.db).toEqual(errorResult.db);
+      expect(context.error).toEqual(errorResult.error);            
 
       done();
 
@@ -116,6 +124,49 @@ describe('GoogleSheetsProvider', () => {
       done();
 
       component.unmount();
+    });
+  });
+
+  it('should refetch data when refetch is called', async (done) => {
+    fetch.mockResponseOnce(JSON.stringify(response));
+
+    const newResponse = response;
+    newResponse.sheets[0].data[0].rowData.push({
+      values: [{ formattedValue: '2' }],        
+    });
+
+    const newResult = result;
+    newResult.db.home.push({ id: '2', name: null });
+
+    const component = mount(
+      <GoogleSheetsProvider>
+        <div />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(() => {
+      let context = component
+        .find(GoogleSheetsProvider)
+        .instance()
+        .getChildContext();
+
+      fetch.mockResponseOnce(JSON.stringify(newResponse));
+
+      context.refetch();
+
+      setImmediate(() => {
+        context = component
+        .find(GoogleSheetsProvider)
+        .instance()
+        .getChildContext();
+
+      expect(context.db).toEqual(newResult.db);
+      expect(context.error).toEqual(newResult.error);      
+
+      done();
+
+      component.unmount();
+      })
     });
   });
 

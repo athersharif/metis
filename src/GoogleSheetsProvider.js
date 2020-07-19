@@ -33,6 +33,7 @@ class GoogleSheetsProvider extends Component {
   static childContextTypes = {
     db: PropTypes.object,
     error: PropTypes.object,
+    refetch: PropTypes.func,
   };
 
   constructor() {
@@ -44,6 +45,10 @@ class GoogleSheetsProvider extends Component {
   }
 
   componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = () => {
     fetch(this.getUrl())
       .then((response) => response.json())
       .then((data) => {
@@ -54,12 +59,14 @@ class GoogleSheetsProvider extends Component {
         }
       })
       .catch((error) => console.error(error));
-  }
+  };
+
+  refetch = () => this.fetchData();
 
   getChildContext() {
     const { db, error } = this.state;
 
-    return { db, error };
+    return { db, error, refetch: this.refetch };
   }
 
   /**

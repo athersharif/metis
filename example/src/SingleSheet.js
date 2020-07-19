@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import { withGoogleSheets } from '../../dist';
 
 const SingleSheet = (props) => (
+  <div>
   <table className="table">
     <thead>
       <tr>
@@ -31,6 +32,10 @@ const SingleSheet = (props) => (
       ))}
     </tbody>
   </table>
+  <button className="btn btn-primary" onClick={props.refetch}>
+      Refresh
+    </button>
+    </div>
 );
 
 SingleSheet.propTypes = {

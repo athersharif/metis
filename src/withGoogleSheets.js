@@ -38,11 +38,12 @@ const withGoogleSheets = (sheets = '*', config = {}) => (WrappedComponent) =>
     static contextTypes = {
       db: PropTypes.object,
       error: PropTypes.object,
+      refetch: PropTypes.func,
     };
 
     render() {
       let result = this.props.db || {};
-      const { db, error } = this.context;
+      const { db, error, refetch } = this.context;
 
       if (error) {
         console.error(error);
@@ -89,7 +90,7 @@ const withGoogleSheets = (sheets = '*', config = {}) => (WrappedComponent) =>
         : DefaultLoadErrorComponent;
 
       return db && result ? (
-        <WrappedComponent {...this.props} db={result} />
+        <WrappedComponent {...this.props} db={result} refetch={refetch} />
       ) : (
         <LoadErrorComponent config={errorComponentConfig} />
       );
