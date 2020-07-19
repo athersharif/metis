@@ -1,6 +1,6 @@
 {
   "name": "react-db-google-sheets",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "React HOC for using Google Sheets as Database",
   "main": "dist/index.js",
   "scripts": {
