@@ -13,6 +13,12 @@ import PropTypes from 'prop-types';
 import flatMap from 'lodash/flatMap';
 import DefaultLoadingComponent from './DefaultLoadingComponent';
 
+export const DataContext = React.createContext({
+  db: null,
+  error: null,
+  refetch: null,
+});
+
 /**
  *
  * Provider for the React App
@@ -30,17 +36,12 @@ class GoogleSheetsProvider extends Component {
     config: PropTypes.object,
   };
 
-  static childContextTypes = {
-    db: PropTypes.object,
-    error: PropTypes.object,
-    refetch: PropTypes.func,
-  };
-
   constructor() {
     super();
     this.state = {
       db: null,
       error: null,
+      refetch: this.refetch,
     };
   }
 
@@ -62,12 +63,6 @@ class GoogleSheetsProvider extends Component {
   };
 
   refetch = () => this.fetchData();
-
-  getChildContext() {
-    const { db, error } = this.state;
-
-    return { db, error, refetch: this.refetch };
-  }
 
   /**
    *
@@ -134,7 +129,9 @@ class GoogleSheetsProvider extends Component {
       : DefaultLoadingComponent;
 
     return this.state.db || this.state.error ? (
-      this.props.children
+      <DataContext.Provider value={this.state}>
+        {this.props.children}
+      </DataContext.Provider>
     ) : (
       <LoadingComponent config={loadingComponentConfig} />
     );

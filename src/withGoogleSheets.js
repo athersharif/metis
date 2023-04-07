@@ -27,74 +27,72 @@ import DefaultLoadErrorComponent from './DefaultLoadErrorComponent';
  * @param {string} [config.dataLoadError.title="Data Load Error"] The title to display, rendered as an `H1` tag
  *
  */
-const withGoogleSheets = (sheets = '*', config = {}) => (WrappedComponent) =>
-  class extends Component {
-    displayName = 'DBGoogleSheets';
+const withGoogleSheets =
+  (sheets = '*', config = {}) =>
+  (WrappedComponent) =>
+    class extends Component {
+      displayName = 'DBGoogleSheets';
 
-    static propTypes = {
-      db: PropTypes.object,
-    };
+      static propTypes = {
+        db: PropTypes.object,
+      };
 
-    static contextTypes = {
-      db: PropTypes.object,
-      error: PropTypes.object,
-      refetch: PropTypes.func,
-    };
+      static contextType = require('./GoogleSheetsProvider').DataContext;
 
-    render() {
-      let result = this.props.db || {};
-      const { db, error, refetch } = this.context;
+      render() {
+        let result = this.props.db || {};
+        const { db, error, refetch } = this.context;
 
-      if (error) {
-        console.error(error);
+        if (error) {
+          console.error(error);
 
-        config = {
-          ...config,
-          dataLoadError: {
-            ...(config.dataLoadError || {}),
-            title:
-              config.dataLoadError && config.dataLoadError.title
-                ? config.dataLoadError.title
-                : `Data Load Error: HTTP Status: ${error.code}`,
-            message:
-              config.dataLoadError && config.dataLoadError.message
-                ? config.dataLoadError.message
-                : error.message,
-          },
-        };
-      } else {
-        if (sheets === '*') {
-          result = db;
+          config = {
+            ...config,
+            dataLoadError: {
+              ...(config.dataLoadError || {}),
+              title:
+                config.dataLoadError && config.dataLoadError.title
+                  ? config.dataLoadError.title
+                  : `Data Load Error: HTTP Status: ${error.code}`,
+              message:
+                config.dataLoadError && config.dataLoadError.message
+                  ? config.dataLoadError.message
+                  : error.message,
+            },
+          };
         } else {
-          if (!isArray(sheets)) {
-            sheets = [sheets];
+          if (sheets === '*') {
+            result = db;
+          } else {
+            if (!isArray(sheets)) {
+              sheets = [sheets];
+            }
+
+            sheets
+              .filter((s) => s)
+              .forEach((sheet) => {
+                const data = get(db, sheet);
+
+                if (data) {
+                  result[sheet] = data;
+                } else {
+                  console.error(`[METIS]: data for ${sheet} was empty`);
+                }
+              });
           }
-
-          sheets
-            .filter((s) => s)
-            .forEach((sheet) => {
-              const data = get(db, sheet);
-
-              if (data) {
-                result[sheet] = data;
-              } else {
-                console.error(`[METIS]: data for ${sheet} was empty`);
-              }
-            });
         }
+
+        const errorComponentConfig = config.dataLoadError || {};
+        const LoadErrorComponent = errorComponentConfig.component
+          ? errorComponentConfig.component
+          : DefaultLoadErrorComponent;
+
+        return db && result ? (
+          <WrappedComponent {...this.props} db={result} refetch={refetch} />
+        ) : (
+          <LoadErrorComponent config={errorComponentConfig} />
+        );
       }
-
-      const errorComponentConfig = config.dataLoadError || {};
-      const LoadErrorComponent = errorComponentConfig.component
-        ? errorComponentConfig.component
-        : DefaultLoadErrorComponent;
-
-      return db && result ? (
-        <WrappedComponent {...this.props} db={result} refetch={refetch} />
-      ) : (
-        <LoadErrorComponent config={errorComponentConfig} />
-      );
-    }
-  };
+    };
 
 export default withGoogleSheets;

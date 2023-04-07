@@ -56,7 +56,7 @@ const MultipleSheets = (props) => (
     </table>
     <button className="btn btn-primary" onClick={props.refetch}>
       Refresh
-    </button>    
+    </button>
   </div>
 );
 

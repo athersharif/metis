@@ -1,8 +1,9 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import 'babel-polyfill';
 import GoogleSheetsProvider from '../GoogleSheetsProvider';
 
+const Component = () => <div />;
 const CustomLoadingComponent = () => <div />;
 
 const response = {
@@ -45,7 +46,7 @@ const errorResponse = {
     code: 403,
     message: 'some error happened',
   },
-  refetch,  
+  refetch,
 };
 
 const errorResult = {
@@ -54,29 +55,26 @@ const errorResult = {
     code: 403,
     message: 'some error happened',
   },
-  refetch,  
+  refetch,
 };
 
 describe('GoogleSheetsProvider', () => {
-  it('should render db context', async (done) => {
+  it('should render db context', (done) => {
     fetch.mockResponseOnce(JSON.stringify(response));
 
-    const component = mount(
+    const component = shallow(
       <GoogleSheetsProvider>
-        <div />
+        <Component />
       </GoogleSheetsProvider>
     );
 
     setImmediate(() => {
-      const context = component
-        .find(GoogleSheetsProvider)
-        .instance()
-        .getChildContext();
+      const context = component.update().props().value;
 
       expect(context.db).toEqual(result.db);
-      expect(context.error).toEqual(result.error);      
+      expect(context.error).toEqual(result.error);
       expect(context.refetch).toEqual(expect.any(Function));
-      expect(component.find('DefaultLoadingComponent').exists()).toBe(true);
+      expect(component.find('ContextProvider').exists()).toBe(true);
 
       done();
 
@@ -84,23 +82,20 @@ describe('GoogleSheetsProvider', () => {
     });
   });
 
-  it('should render error context on error', async (done) => {
+  it('should render error context on error', (done) => {
     fetch.mockResponseOnce(JSON.stringify(errorResponse));
 
-    const component = mount(
+    const component = shallow(
       <GoogleSheetsProvider>
         <div />
       </GoogleSheetsProvider>
     );
 
     setImmediate(() => {
-      const context = component
-        .find(GoogleSheetsProvider)
-        .instance()
-        .getChildContext();
+      const context = component.update().props().value;
 
       expect(context.db).toEqual(errorResult.db);
-      expect(context.error).toEqual(errorResult.error);            
+      expect(context.error).toEqual(errorResult.error);
 
       done();
 
@@ -108,17 +103,19 @@ describe('GoogleSheetsProvider', () => {
     });
   });
 
-  it('should should log error when fetch fails', async (done) => {
+  it('should should log error when fetch fails', (done) => {
     fetch.mockRejectOnce('some error');
     console.error = jest.fn();
 
-    const component = mount(
+    const component = shallow(
       <GoogleSheetsProvider>
         <div />
       </GoogleSheetsProvider>
     );
 
     setImmediate(() => {
+      component.update();
+
       expect(console.error).toHaveBeenCalledWith('some error');
 
       done();
@@ -127,50 +124,44 @@ describe('GoogleSheetsProvider', () => {
     });
   });
 
-  it('should refetch data when refetch is called', async (done) => {
+  it('should refetch data when refetch is called', (done) => {
     fetch.mockResponseOnce(JSON.stringify(response));
 
-    const newResponse = response;
-    newResponse.sheets[0].data[0].rowData.push({
-      values: [{ formattedValue: '2' }],        
-    });
-
-    const newResult = result;
-    newResult.db.home.push({ id: '2', name: null });
-
-    const component = mount(
+    const component = shallow(
       <GoogleSheetsProvider>
         <div />
       </GoogleSheetsProvider>
     );
 
-    setImmediate(() => {
-      let context = component
-        .find(GoogleSheetsProvider)
-        .instance()
-        .getChildContext();
+    setImmediate(async () => {
+      let context = component.update().props().value;
+
+      const newResponse = response;
+      newResponse.sheets[0].data[0].rowData.push({
+        values: [{ formattedValue: '2' }],
+      });
+
+      const newResult = result;
+      newResult.db.home.push({ id: '2', name: null });
 
       fetch.mockResponseOnce(JSON.stringify(newResponse));
 
-      context.refetch();
+      await context.refetch();
 
       setImmediate(() => {
-        context = component
-        .find(GoogleSheetsProvider)
-        .instance()
-        .getChildContext();
+        context = component.update().props().value;
 
-      expect(context.db).toEqual(newResult.db);
-      expect(context.error).toEqual(newResult.error);      
+        expect(context.db).toEqual(newResult.db);
+        expect(context.error).toEqual(newResult.error);
 
-      done();
+        done();
 
-      component.unmount();
-      })
+        component.unmount();
+      });
     });
   });
 
-  it('should render the DefaultLoadingComponent per config when no context and no loading component specified', async (done) => {
+  it('should render the DefaultLoadingComponent per config when no context and no loading component specified', (done) => {
     const config = {
       dataLoading: {
         className: 'my-custom-title',
@@ -187,19 +178,19 @@ describe('GoogleSheetsProvider', () => {
       </GoogleSheetsProvider>
     );
 
+    const loadingComponent = component.find('DefaultLoadingComponent');
+
+    expect(loadingComponent.exists()).toBe(true);
+    expect(loadingComponent.prop('config')).toEqual(config.dataLoading);
+
     setImmediate(() => {
-      const loadingComponent = component.find('DefaultLoadingComponent');
-
-      expect(loadingComponent.exists()).toBe(true);
-      expect(loadingComponent.prop('config')).toEqual(config.dataLoading);
-
       done();
 
       component.unmount();
     });
   });
 
-  it('should render the CustomLoadingComponent per config when no loading component specified', async (done) => {
+  it('should render the CustomLoadingComponent per config when no loading component specified', (done) => {
     const config = {
       dataLoading: {
         component: CustomLoadingComponent,
@@ -214,9 +205,9 @@ describe('GoogleSheetsProvider', () => {
       </GoogleSheetsProvider>
     );
 
-    setImmediate(() => {
-      expect(component.find('CustomLoadingComponent').exists()).toBe(true);
+    expect(component.find('CustomLoadingComponent').exists()).toBe(true);
 
+    setImmediate(() => {
       done();
 
       component.unmount();

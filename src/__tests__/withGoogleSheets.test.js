@@ -4,9 +4,19 @@ import withGoogleSheets from '../withGoogleSheets';
 
 const Component = () => <div />;
 const CustomLoadErrorComponent = () => <div />;
-const WrappedComponent = withGoogleSheets('sheetName')(Component);
+
+const mockDataContext = (context) => {
+  const mockContext = React.createContext(context);
+  jest.mock('../GoogleSheetsProvider', () => ({
+    DataContext: mockContext,
+  }));
+};
 
 describe('withGoogleSheets', () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
+
   it('should render the DefaultLoadErrorComponent when no context and no load error component specified', () => {
     console.error = jest.fn();
     const context = {
@@ -17,7 +27,10 @@ describe('withGoogleSheets', () => {
       },
     };
 
-    const component = mount(<WrappedComponent />, { context });
+    mockDataContext(context);
+
+    const WrappedComponent = withGoogleSheets('sheetName')(Component);
+    const component = mount(<WrappedComponent />);
 
     const loadErrorComponent = component.find('DefaultLoadErrorComponent');
     expect(console.error).toHaveBeenCalledWith(context.error);
@@ -34,7 +47,7 @@ describe('withGoogleSheets', () => {
         title: 'My Custom Title',
       },
     };
-    const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
+
     const context = {
       db: undefined,
       error: {
@@ -43,6 +56,9 @@ describe('withGoogleSheets', () => {
       },
     };
 
+    mockDataContext(context);
+
+    const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
     const component = mount(<WrappedComponent />, { context });
 
     const loadErrorComponent = component.find('DefaultLoadErrorComponent');
@@ -60,7 +76,7 @@ describe('withGoogleSheets', () => {
         component: CustomLoadErrorComponent,
       },
     };
-    const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
+
     const context = {
       db: undefined,
       error: {
@@ -69,6 +85,9 @@ describe('withGoogleSheets', () => {
       },
     };
 
+    mockDataContext(context);
+
+    const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
     const component = mount(<WrappedComponent />, { context });
 
     expect(component.find('CustomLoadErrorComponent').exists()).toBe(true);
@@ -84,7 +103,10 @@ describe('withGoogleSheets', () => {
       },
     };
 
-    const component = mount(<WrappedComponent />, { context });
+    mockDataContext(context);
+
+    const WrappedComponent = withGoogleSheets('sheetName')(Component);
+    const component = mount(<WrappedComponent />);
 
     const mainComponent = component.find('Component');
 
@@ -102,10 +124,11 @@ describe('withGoogleSheets', () => {
       },
     };
 
+    mockDataContext(context);
+
     const WrappedComponent = withGoogleSheets(['sheetName', 'someOtherSheet'])(
       Component
     );
-
     const component = mount(<WrappedComponent />, { context });
 
     const mainComponent = component.find('Component');
@@ -124,8 +147,9 @@ describe('withGoogleSheets', () => {
       },
     };
 
-    const WrappedComponent = withGoogleSheets('*')(Component);
+    mockDataContext(context);
 
+    const WrappedComponent = withGoogleSheets('*')(Component);
     const component = mount(<WrappedComponent />, { context });
 
     const mainComponent = component.find('Component');
@@ -144,8 +168,9 @@ describe('withGoogleSheets', () => {
       },
     };
 
-    const WrappedComponent = withGoogleSheets()(Component);
+    mockDataContext(context);
 
+    const WrappedComponent = withGoogleSheets()(Component);
     const component = mount(<WrappedComponent />, { context });
 
     const mainComponent = component.find('Component');
@@ -162,6 +187,8 @@ describe('withGoogleSheets', () => {
         sheetName: [{ id: 1 }],
       },
     };
+
+    mockDataContext(context);
 
     const WrappedComponent = withGoogleSheets(['sheetName', null])(Component);
     const component = mount(<WrappedComponent />, { context });
@@ -182,11 +209,13 @@ describe('withGoogleSheets', () => {
       },
     };
 
+    mockDataContext(context);
+
     const WrappedComponent = withGoogleSheets([
       'sheetName',
       'someSheetThatDoesntExist',
     ])(Component);
-    const component = mount(<WrappedComponent />, { context });
+    const component = mount(<WrappedComponent />);
 
     const mainComponent = component.find('Component');
 

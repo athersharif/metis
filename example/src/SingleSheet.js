@@ -14,28 +14,28 @@ import { withGoogleSheets } from '../../dist';
 
 const SingleSheet = (props) => (
   <div>
-  <table className="table">
-    <thead>
-      <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>email</th>
-      </tr>
-    </thead>
-    <tbody>
-      {props.db.samplesheet.map((data) => (
-        <tr key={data.id}>
-          <td>{data.id}</td>
-          <td>{data.name}</td>
-          <td>{data.email}</td>
+    <table className="table">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>name</th>
+          <th>email</th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-  <button className="btn btn-primary" onClick={props.refetch}>
+      </thead>
+      <tbody>
+        {props.db.samplesheet.map((data) => (
+          <tr key={data.id}>
+            <td>{data.id}</td>
+            <td>{data.name}</td>
+            <td>{data.email}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <button className="btn btn-primary" onClick={props.refetch}>
       Refresh
     </button>
-    </div>
+  </div>
 );
 
 SingleSheet.propTypes = {

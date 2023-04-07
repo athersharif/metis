@@ -4,6 +4,8 @@ Higher-Order Component (HOC) for React that allows using Google Sheets as a Data
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/metis/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-db-google-sheets.svg?style=flat)](https://www.npmjs.com/package/react-db-google-sheets) [![Travis](https://travis-ci.org/athersharif/metis.svg?branch=master)](https://travis-ci.org/athersharif/metis)
 
+**Note:** This library only offers *read* access to your Google Sheet. This decision was made based on a use case that allows developers to create apps for users who prefer the simplicity of editing data in the spreadsheet directly. Please use other libraries for *write* access.
+
 ## Installation
 
 ```npm install react-db-google-sheets --save```
