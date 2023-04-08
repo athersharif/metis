@@ -46,8 +46,25 @@ var GoogleSheetsProvider = function (_Component) {
     var _this;
     _classCallCheck(this, GoogleSheetsProvider);
     _this = _super.call(this);
+    _defineProperty(_assertThisInitialized(_this), "sheetsApiUrl", "https://sheets.googleapis.com/v4/spreadsheets/".concat(process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID, "?includeGridData=true&fields=sheets(data%2FrowData%2Fvalues%2FformattedValue%2Cproperties%2Ftitle)&key=").concat(process.env.REACT_APP_GOOGLE_SHEETS_API_KEY));
+    _defineProperty(_assertThisInitialized(_this), "driveApiUrl", "https://www.googleapis.com/drive/v3/files/".concat(process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID, "?fields=modifiedTime&key=").concat(process.env.REACT_APP_GOOGLE_SHEETS_API_KEY));
     _defineProperty(_assertThisInitialized(_this), "fetchData", function () {
-      fetch(_this.getUrl()).then(function (response) {
+      var lastCheckedAt = window.localStorage.getItem('metisLastCheckedAt');
+      if (lastCheckedAt == null || _this.state.db === null) _this.fetchSheetData();else {
+        fetch(_this.driveApiUrl).then(function (response) {
+          return response.json();
+        }).then(function (_ref) {
+          var modifiedTime = _ref.modifiedTime;
+          var lastModified = Date.parse(modifiedTime);
+          if (lastCheckedAt < lastModified) _this.fetchSheetData();
+        })["catch"](function (error) {
+          return console.error(error);
+        });
+      }
+      window.localStorage.setItem('metisLastCheckedAt', Date.now());
+    });
+    _defineProperty(_assertThisInitialized(_this), "fetchSheetData", function () {
+      fetch(_this.sheetsApiUrl).then(function (response) {
         return response.json();
       }).then(function (data) {
         if (data.error) {
@@ -66,11 +83,8 @@ var GoogleSheetsProvider = function (_Component) {
     _defineProperty(_assertThisInitialized(_this), "refetch", function () {
       return _this.fetchData();
     });
-    _defineProperty(_assertThisInitialized(_this), "getUrl", function () {
-      return "https://sheets.googleapis.com/v4/spreadsheets/".concat(process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID, "?includeGridData=true&fields=sheets(data%2FrowData%2Fvalues%2FformattedValue%2Cproperties%2Ftitle)&key=").concat(process.env.REACT_APP_GOOGLE_SHEETS_API_KEY);
-    });
-    _defineProperty(_assertThisInitialized(_this), "processData", function (_ref) {
-      var sheets = _ref.sheets;
+    _defineProperty(_assertThisInitialized(_this), "processData", function (_ref2) {
+      var sheets = _ref2.sheets;
       var result = {};
       sheets.forEach(function (sheet) {
         var id = sheet.properties.title,

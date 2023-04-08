@@ -41,6 +41,14 @@ const result = {
   refetch,
 };
 
+const newResponse = response;
+newResponse.sheets[0].data[0].rowData.push({
+  values: [{ formattedValue: '2' }],
+});
+
+const newResult = result;
+newResult.db.home.push({ id: '2', name: null });
+
 const errorResponse = {
   error: {
     code: 403,
@@ -59,7 +67,13 @@ const errorResult = {
 };
 
 describe('GoogleSheetsProvider', () => {
-  it('should render db context', (done) => {
+  beforeEach(() => {
+    window.localStorage.setItem('metisLastCheckedAt', 1680939972);
+  });
+
+  it('should call Sheets API when localStorage does not have metisLastCheckedAt', (done) => {
+    window.localStorage.removeItem('metisLastCheckedAt');
+
     fetch.mockResponseOnce(JSON.stringify(response));
 
     const component = shallow(
@@ -79,6 +93,127 @@ describe('GoogleSheetsProvider', () => {
       done();
 
       component.unmount();
+    });
+  });
+
+  it('should call Sheets API when localStorage has metisLastCheckedAt but db state is null', (done) => {
+    fetch.mockResponseOnce(JSON.stringify(response));
+
+    const component = shallow(
+      <GoogleSheetsProvider>
+        <Component />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(() => {
+      const context = component.update().props().value;
+
+      expect(context.db).toEqual(result.db);
+      expect(context.error).toEqual(result.error);
+      expect(context.refetch).toEqual(expect.any(Function));
+      expect(component.find('ContextProvider').exists()).toBe(true);
+
+      done();
+
+      component.unmount();
+    });
+  });
+
+  it('should call Drive API only when localStorage has metisLastCheckedAt and db state is not null and lastModified is earlier than last checked time', (done) => {
+    const driveResponse = {
+      modifiedTime: 1680939971,
+    };
+
+    fetch.mockResponses(
+      [JSON.stringify(response)],
+      [JSON.stringify(driveResponse)]
+    );
+
+    const component = shallow(
+      <GoogleSheetsProvider>
+        <Component />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(async () => {
+      const context = component.update().props().value;
+
+      await context.refetch();
+
+      setImmediate(() => {
+        expect(context.db).toEqual(result.db);
+        expect(context.error).toEqual(result.error);
+        expect(context.refetch).toEqual(expect.any(Function));
+        expect(component.find('ContextProvider').exists()).toBe(true);
+
+        done();
+
+        component.unmount();
+      });
+    });
+  });
+
+  it('should call Drive API only when localStorage has metisLastCheckedAt and db state is not null and lastModified is after last checked time', (done) => {
+    const driveResponse = {
+      modifiedTime: 1680939973,
+    };
+
+    fetch.mockResponses(
+      [JSON.stringify(response)],
+      [JSON.stringify(driveResponse)],
+      [JSON.stringify(newResponse)]
+    );
+
+    const component = shallow(
+      <GoogleSheetsProvider>
+        <Component />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(async () => {
+      const context = component.update().props().value;
+
+      await context.refetch();
+
+      setImmediate(() => {
+        expect(context.db).toEqual(newResult.db);
+        expect(context.error).toEqual(newResult.error);
+        expect(context.refetch).toEqual(expect.any(Function));
+        expect(component.find('ContextProvider').exists()).toBe(true);
+
+        done();
+
+        component.unmount();
+      });
+    });
+  });
+
+  it('should log error when drive api throws error', (done) => {
+    fetch.mockResponse(JSON.stringify(response));
+    console.error = jest.fn();
+
+    const component = shallow(
+      <GoogleSheetsProvider>
+        <Component />
+      </GoogleSheetsProvider>
+    );
+
+    setImmediate(async () => {
+      const context = component.update().props().value;
+
+      fetch.mockRejectOnce('some drive api error');
+
+      await context.refetch();
+
+      setImmediate(() => {
+        component.update();
+
+        expect(console.error).toHaveBeenCalledWith('some drive api error');
+
+        done();
+
+        component.unmount();
+      });
     });
   });
 
@@ -121,43 +256,6 @@ describe('GoogleSheetsProvider', () => {
       done();
 
       component.unmount();
-    });
-  });
-
-  it('should refetch data when refetch is called', (done) => {
-    fetch.mockResponseOnce(JSON.stringify(response));
-
-    const component = shallow(
-      <GoogleSheetsProvider>
-        <div />
-      </GoogleSheetsProvider>
-    );
-
-    setImmediate(async () => {
-      let context = component.update().props().value;
-
-      const newResponse = response;
-      newResponse.sheets[0].data[0].rowData.push({
-        values: [{ formattedValue: '2' }],
-      });
-
-      const newResult = result;
-      newResult.db.home.push({ id: '2', name: null });
-
-      fetch.mockResponseOnce(JSON.stringify(newResponse));
-
-      await context.refetch();
-
-      setImmediate(() => {
-        context = component.update().props().value;
-
-        expect(context.db).toEqual(newResult.db);
-        expect(context.error).toEqual(newResult.error);
-
-        done();
-
-        component.unmount();
-      });
     });
   });
 

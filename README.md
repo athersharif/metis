@@ -2,9 +2,13 @@
 
 Higher-Order Component (HOC) for React that allows using Google Sheets as a Database.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/metis/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-db-google-sheets.svg?style=flat)](https://www.npmjs.com/package/react-db-google-sheets) [![Travis](https://travis-ci.org/athersharif/metis.svg?branch=master)](https://travis-ci.org/athersharif/metis)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/metis/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-db-google-sheets.svg?style=flat)](https://www.npmjs.com/package/react-db-google-sheets) [![athersharif](https://circleci.com/gh/athersharif/metis.svg?style=svg)](https://app.circleci.com/pipelines/github/athersharif/metis)
 
 **Note:** This library only offers *read* access to your Google Sheet. This decision was made based on a use case that allows developers to create apps for users who prefer the simplicity of editing data in the spreadsheet directly. Please use other libraries for *write* access.
+
+## Change Log
+
+- v3.0.0 introduces a breaking change, requiring Step 5 under the `Getting the API key` subsection.
 
 ## Installation
 
@@ -214,8 +218,9 @@ https://docs.google.com/spreadsheets/d/[THIS-IS-THE-DOC-ID]/
 - **Step 2**: Create a new Project [here](https://console.developers.google.com/projectcreate). Use any project name that makes sense to you.
 - **Step 3**: Click on `Enable APIs and Services` and search for `Google Sheets`. `Google Sheets API` will show up as the sole result. Click on it.
 - **Step 4**: Enable the API by click `Enable`.
-- **Step 5**: Once the API is enabled, you'll see `Credentials` on the left sidebar. Click on it. Then, click on `Create Credentials` > `API Key` (you may have to refresh for this option to become visible).
-- **Step 6**: You will now see a screen that says `API key created` with the API key. This is your API key.
+- **Step 5**: Repeat the same steps for `Google Drive API` and enable it, too.
+- **Step 6**: Once the API is enabled, you'll see `Credentials` on the left sidebar. Click on it. Then, click on `Create Credentials` > `API Key` (you may have to refresh for this option to become visible).
+- **Step 7**: You will now see a screen that says `API key created` with the API key. This is your API key.
 
 It's always a good idea to learn more about the keys and quota, and what it all really means. But for the sake of simplicity, that API key is all you need. **It is important that you read the [`Google Sheets API Usage Limits`](https://developers.google.com/sheets/api/limits)**. More specifically:
 
