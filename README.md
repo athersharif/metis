@@ -270,4 +270,4 @@ Pull requests are welcome and appreciated. Contributing guidelines can be found 
 
 ## License
 
-Licensed under MIT. Can be found [here](https://github.com/athersharif/metis/blob/master/LICENSE).
+Licensed under BSD. Can be found [here](https://github.com/athersharif/metis/blob/master/LICENSE).
