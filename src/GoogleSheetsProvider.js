@@ -28,6 +28,10 @@ export const DataContext = React.createContext({
  * @param {function} [config.dataLoading.component] The custom component to render when loading results from Google Sheets.
  * @param {string} [config.dataLoading.className="data-load-error"] The class name of the Component for custom styling and control.
  * @param {string} [config.dataLoading.text="Loading..."] The text to display when loading results, rendered as a `P` tag.
+ * @param {string} [config.sheetId=null] The Google Sheets Document ID to fetch data from.
+ * @param {string} [config.sheetApiKey=null] The Google Sheets API Key to use for authentication.
+ * @param {string} [config.driveId=null] The Google Drive Document ID to check for last modified time.
+ * @param {string} [config.driveApiKey=null] The Google Drive API Key to use for authentication.
  *
  */
 class GoogleSheetsProvider extends Component {
@@ -46,45 +50,27 @@ class GoogleSheetsProvider extends Component {
   }
 
   componentDidMount() {
+    /**
+     *
+     * Constructs the URL for Google Sheets API using the DOC ID and API KEY passed in the configs.
+     *
+     */
+    this.sheetsApiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${this.props?.config?.sheetId}?includeGridData=true&fields=sheets(data%2FrowData%2Fvalues%2FformattedValue%2Cproperties%2Ftitle)&key=${this.props?.config?.sheetApiKey}`;
+
+    /**
+     *
+     * Constructs the URL for Google Drive API using the DOC ID and API KEY passed in the configs.
+     *
+     */
+    this.driveApiUrl = `https://www.googleapis.com/drive/v3/files/${this.props?.config?.driveId}?fields=modifiedTime&key=${this.props?.config?.driveApiKey}`;
+
     this.fetchData();
   }
 
   /**
-   *
-   * Constructs the URL for Google Sheets API. Uses the Google Sheets ID and API key from the `REACT_APP_GOOGLE_SHEETS_DOC_ID` and `REACT_APP_GOOGLE_SHEETS_API_KEY` environment variables respectively. The environment variables should be declared as per the [Create React App guidelines](https://create-react-app.dev/docs/adding-custom-environment-variables/).
-   *
-   */
-  sheetsApiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID}?includeGridData=true&fields=sheets(data%2FrowData%2Fvalues%2FformattedValue%2Cproperties%2Ftitle)&key=${process.env.REACT_APP_GOOGLE_SHEETS_API_KEY}`;
-
-  /**
-   *
-   * Constructs the URL for Google Drive API. Uses the Google Sheets ID and API key from the `REACT_APP_GOOGLE_SHEETS_DOC_ID` and `REACT_APP_GOOGLE_SHEETS_API_KEY` environment variables respectively. The environment variables should be declared as per the [Create React App guidelines](https://create-react-app.dev/docs/adding-custom-environment-variables/).
-   *
-   */
-  driveApiUrl = `https://www.googleapis.com/drive/v3/files/${process.env.REACT_APP_GOOGLE_SHEETS_DOC_ID}?fields=modifiedTime&key=${process.env.REACT_APP_GOOGLE_SHEETS_API_KEY}`;
-
-  /**
-   * Fetches Google Sheets data by first checking when it was modified. If it was modified before the last check then pulls the data from localStorage otherwise makes a network call to Google Sheets API. Helpful when processing large amount of Sheets data.
+   * Fetches Google Sheets data.
    */
   fetchData = () => {
-    let lastCheckedAt = window.localStorage.getItem('metisLastCheckedAt');
-
-    if (lastCheckedAt == null || this.state.db === null) this.fetchSheetData();
-    else {
-      fetch(this.driveApiUrl)
-        .then((response) => response.json())
-        .then(({ modifiedTime }) => {
-          const lastModified = Date.parse(modifiedTime);
-
-          if (lastCheckedAt < lastModified) this.fetchSheetData();
-        })
-        .catch((error) => console.error(error));
-    }
-
-    window.localStorage.setItem('metisLastCheckedAt', Date.now());
-  };
-
-  fetchSheetData = () => {
     fetch(this.sheetsApiUrl)
       .then((response) => response.json())
       .then((data) => {

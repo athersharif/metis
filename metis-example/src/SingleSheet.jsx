@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -10,9 +9,9 @@ import PropTypes from 'prop-types';
  * import { withGoogleSheets } from 'react-db-google-sheets';
  *
  */
-import { withGoogleSheets } from '../../dist';
+import { withGoogleSheets } from '#external/metis.esm.min.mjs';
 
-const SingleSheet = (props) => (
+const SingleSheetComponent = (props) => (
   <div>
     <table className="table">
       <thead>
@@ -38,10 +37,12 @@ const SingleSheet = (props) => (
   </div>
 );
 
-SingleSheet.propTypes = {
+SingleSheetComponent.propTypes = {
   db: PropTypes.shape({
     samplesheet: PropTypes.arrayOf(PropTypes.object),
   }),
 };
 
-export default withGoogleSheets('samplesheet')(SingleSheet);
+const SingleSheet = withGoogleSheets('samplesheet')(SingleSheetComponent);
+
+export default SingleSheet;

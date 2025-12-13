@@ -1,44 +1,36 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import withGoogleSheets from '../withGoogleSheets';
+import PropTypes from 'prop-types';
+import '@testing-library/jest-dom';
+import { render, screen, cleanup } from '@testing-library/react';
 
-const Component = () => <div />;
-const CustomLoadErrorComponent = () => <div />;
+afterEach(() => {
+  cleanup();
+  jest.resetModules();
+});
 
-const mockDataContext = (context) => {
+const makeMockDataContext = (context) => {
   const mockContext = React.createContext(context);
-  jest.mock('../GoogleSheetsProvider', () => ({
-    DataContext: mockContext,
-  }));
+  jest.doMock('../GoogleSheetsProvider', () => ({ DataContext: mockContext }));
 };
 
-describe('withGoogleSheets', () => {
-  beforeEach(() => {
-    jest.resetModules();
-  });
-
-  it('should render the DefaultLoadErrorComponent when no context and no load error component specified', () => {
+describe('withGoogleSheets (RTL)', () => {
+  test('renders DefaultLoadErrorComponent when no context and no load error component specified', async () => {
     console.error = jest.fn();
-    const context = {
-      db: undefined,
-      error: {
-        code: 400,
-        message: 'some error',
-      },
-    };
+    const context = { db: undefined, error: { code: 400, message: 'some error' } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets('sheetName')(Component);
-    const component = mount(<WrappedComponent />);
+    const Component = () => <div />;
+    const Wrapped = withGoogleSheets('sheetName')(Component);
 
-    const loadErrorComponent = component.find('DefaultLoadErrorComponent');
+    render(<Wrapped />);
+
     expect(console.error).toHaveBeenCalledWith(context.error);
-
-    expect(loadErrorComponent.exists()).toBe(true);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Data Load Error: HTTP Status: 400');
   });
 
-  it('should render the DefaultLoadErrorComponent per config when no context and no load error component specified', () => {
+  test('renders DefaultLoadErrorComponent per config when specified', () => {
     console.error = jest.fn();
     const config = {
       dataLoadError: {
@@ -47,184 +39,126 @@ describe('withGoogleSheets', () => {
         title: 'My Custom Title',
       },
     };
+    const context = { db: undefined, error: { code: 400, message: 'some error' } };
 
-    const context = {
-      db: undefined,
-      error: {
-        code: 400,
-        message: 'some error',
-      },
-    };
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    mockDataContext(context);
+    const Component = () => <div />;
+    const Wrapped = withGoogleSheets('sheetName', config)(Component);
 
-    const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
-    const component = mount(<WrappedComponent />, { context });
+    render(<Wrapped />);
 
-    const loadErrorComponent = component.find('DefaultLoadErrorComponent');
-
-    expect(loadErrorComponent.exists()).toBe(true);
-    expect(loadErrorComponent.prop('config')).toEqual(config.dataLoadError);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(config.dataLoadError.title);
+    expect(screen.getByText(config.dataLoadError.message)).toBeInTheDocument();
     expect(console.error).toHaveBeenCalledWith(context.error);
-
-    component.unmount();
   });
 
-  it('should render the CustomLoadErrorComponent per config when no context and load error component specified', () => {
-    const config = {
-      dataLoadError: {
-        component: CustomLoadErrorComponent,
-      },
-    };
+  test('renders CustomLoadErrorComponent per config when provided', () => {
+    const config = { dataLoadError: { component: () => <div data-testid="custom-load-error" /> } };
+    const context = { db: undefined, error: { code: 400, message: 'some error' } };
 
-    const context = {
-      db: undefined,
-      error: {
-        code: 400,
-        message: 'some error',
-      },
-    };
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    mockDataContext(context);
+    const Component = () => <div />;
+    const Wrapped = withGoogleSheets('sheetName', config)(Component);
 
-    const WrappedComponent = withGoogleSheets('sheetName', config)(Component);
-    const component = mount(<WrappedComponent />, { context });
+    render(<Wrapped />);
 
-    expect(component.find('CustomLoadErrorComponent').exists()).toBe(true);
+    expect(screen.getByTestId('custom-load-error')).toBeInTheDocument();
     expect(console.error).toHaveBeenCalledWith(context.error);
-
-    component.unmount();
   });
 
-  it('should render the Component when context exists', () => {
-    const context = {
-      db: {
-        sheetName: [{ id: 1 }],
-      },
-    };
+  test('renders wrapped Component when context exists', () => {
+    const context = { db: { sheetName: [{ id: 1 }] } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets('sheetName')(Component);
-    const component = mount(<WrappedComponent />);
+    const Component = ({ db }) => <pre data-testid="db">{JSON.stringify(db)}</pre>;
+    Component.propTypes = { db: PropTypes.object };    
+    const Wrapped = withGoogleSheets('sheetName')(Component);
 
-    const mainComponent = component.find('Component');
+    render(<Wrapped />);
 
-    expect(mainComponent.exists()).toBe(true);
-    expect(mainComponent.prop('db')).toEqual(context.db);
-
-    component.unmount();
+    expect(screen.getByTestId('db')).toHaveTextContent(JSON.stringify(context.db));
   });
 
-  it('should render the Component with multiple sheets data when array of sheet names is provided', () => {
-    const context = {
-      db: {
-        sheetName: [{ id: 1 }],
-        someOtherSheet: [{ id: 4 }],
-      },
-    };
+  test('renders wrapped Component with multiple sheets when array provided', () => {
+    const context = { db: { sheetName: [{ id: 1 }], someOtherSheet: [{ id: 4 }] } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets(['sheetName', 'someOtherSheet'])(
-      Component
-    );
-    const component = mount(<WrappedComponent />, { context });
+    const Component = ({ db }) => <pre data-testid="db">{JSON.stringify(db)}</pre>;
+    Component.propTypes = { db: PropTypes.object };    
+    const Wrapped = withGoogleSheets(['sheetName', 'someOtherSheet'])(Component);
 
-    const mainComponent = component.find('Component');
+    render(<Wrapped />);
 
-    expect(mainComponent.exists()).toBe(true);
-    expect(mainComponent.prop('db')).toEqual(context.db);
-
-    component.unmount();
+    expect(screen.getByTestId('db')).toHaveTextContent(JSON.stringify(context.db));
   });
 
-  it('should render the Component with all sheets data when * is provided', () => {
-    const context = {
-      db: {
-        sheetName: [{ id: 1 }],
-        someOtherSheet: [{ id: 4 }],
-      },
-    };
+  test('renders all sheets when "*" provided', () => {
+    const context = { db: { sheetName: [{ id: 1 }], someOtherSheet: [{ id: 4 }] } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets('*')(Component);
-    const component = mount(<WrappedComponent />, { context });
+    const Component = ({ db }) => <pre data-testid="db">{JSON.stringify(db)}</pre>;
+    Component.propTypes = { db: PropTypes.object };    
+    const Wrapped = withGoogleSheets('*')(Component);
 
-    const mainComponent = component.find('Component');
+    render(<Wrapped />);
 
-    expect(mainComponent.exists()).toBe(true);
-    expect(mainComponent.prop('db')).toEqual(context.db);
-
-    component.unmount();
+    expect(screen.getByTestId('db')).toHaveTextContent(JSON.stringify(context.db));
   });
 
-  it('should render the Component with all sheets data when no argument is provided', () => {
-    const context = {
-      db: {
-        sheetName: [{ id: 1 }],
-        someOtherSheet: [{ id: 4 }],
-      },
-    };
+  test('renders all sheets when no argument provided', () => {
+    const context = { db: { sheetName: [{ id: 1 }], someOtherSheet: [{ id: 4 }] } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets()(Component);
-    const component = mount(<WrappedComponent />, { context });
+    const Component = ({ db }) => <pre data-testid="db">{JSON.stringify(db)}</pre>;
+    Component.propTypes = { db: PropTypes.object };
+    const Wrapped = withGoogleSheets()(Component);
 
-    const mainComponent = component.find('Component');
+    render(<Wrapped />);
 
-    expect(mainComponent.exists()).toBe(true);
-    expect(mainComponent.prop('db')).toEqual(context.db);
-
-    component.unmount();
+    expect(screen.getByTestId('db')).toHaveTextContent(JSON.stringify(context.db));
   });
 
-  it('should render the Component with unchanged results when sheet empty', () => {
-    const context = {
-      db: {
-        sheetName: [{ id: 1 }],
-      },
-    };
+  test('leaves results unchanged when sheet is null in the list', () => {
+    const context = { db: { sheetName: [{ id: 1 }] } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets(['sheetName', null])(Component);
-    const component = mount(<WrappedComponent />, { context });
+    const Component = ({ db }) => <pre data-testid="db">{JSON.stringify(db)}</pre>;
+    Component.propTypes = { db: PropTypes.object };
+    const Wrapped = withGoogleSheets(['sheetName', null])(Component);
 
-    const mainComponent = component.find('Component');
+    render(<Wrapped />);
 
-    expect(mainComponent.exists()).toBe(true);
-    expect(mainComponent.prop('db')).toEqual(context.db);
-
-    component.unmount();
+    expect(screen.getByTestId('db')).toHaveTextContent(JSON.stringify(context.db));
   });
 
-  it("should render the Component with unchanged results when sheet doesn't exist", () => {
+  test("logs when sheet doesn't exist and leaves results unchanged", () => {
     console.error = jest.fn();
-    const context = {
-      db: {
-        sheetName: [{ id: 1 }],
-      },
-    };
+    const context = { db: { sheetName: [{ id: 1 }] } };
 
-    mockDataContext(context);
+    makeMockDataContext(context);
+    const { default: withGoogleSheets } = require('../withGoogleSheets');
 
-    const WrappedComponent = withGoogleSheets([
-      'sheetName',
-      'someSheetThatDoesntExist',
-    ])(Component);
-    const component = mount(<WrappedComponent />);
+    const Component = ({ db }) => <pre data-testid="db">{JSON.stringify(db)}</pre>;
+    Component.propTypes = { db: PropTypes.object };
+    const Wrapped = withGoogleSheets(['sheetName', 'someSheetThatDoesntExist'])(Component);
 
-    const mainComponent = component.find('Component');
+    render(<Wrapped />);
 
-    expect(mainComponent.exists()).toBe(true);
-    expect(mainComponent.prop('db')).toEqual(context.db);
-    expect(console.error).toHaveBeenCalledWith(
-      '[METIS]: data for someSheetThatDoesntExist was empty'
-    );
-
-    component.unmount();
+    expect(screen.getByTestId('db')).toHaveTextContent(JSON.stringify(context.db));
+    expect(console.error).toHaveBeenCalledWith('[METIS]: data for someSheetThatDoesntExist was empty');
   });
 });
