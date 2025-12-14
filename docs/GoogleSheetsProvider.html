@@ -332,6 +332,162 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>sheetId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The Google Sheets Document ID to fetch data from.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sheetApiKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The Google Sheets API Key to use for authentication.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>driveId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The Google Drive Document ID to check for last modified time.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>driveApiKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The Google Drive API Key to use for authentication.</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -376,7 +532,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line33">line 33</a>
+        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -432,7 +588,7 @@
 
 
 <div class="description">
-    <p>Constructs the URL for Google Drive API. Uses the Google Sheets ID and API key from the <code>REACT_APP_GOOGLE_SHEETS_DOC_ID</code> and <code>REACT_APP_GOOGLE_SHEETS_API_KEY</code> environment variables respectively. The environment variables should be declared as per the <a href="https://create-react-app.dev/docs/adding-custom-environment-variables/">Create React App guidelines</a>.</p>
+    <p>Constructs the URL for Google Drive API using the DOC ID and API KEY passed in the configs.</p>
 </div>
 
 
@@ -470,7 +626,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line64">line 64</a>
+        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -532,7 +688,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line69">line 69</a>
+        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -594,7 +750,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line110">line 110</a>
+        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line114">line 114</a>
     </li></ul></dd>
     
 
@@ -618,7 +774,7 @@
 
 
 <div class="description">
-    <p>Constructs the URL for Google Sheets API. Uses the Google Sheets ID and API key from the <code>REACT_APP_GOOGLE_SHEETS_DOC_ID</code> and <code>REACT_APP_GOOGLE_SHEETS_API_KEY</code> environment variables respectively. The environment variables should be declared as per the <a href="https://create-react-app.dev/docs/adding-custom-environment-variables/">Create React App guidelines</a>.</p>
+    <p>Constructs the URL for Google Sheets API using the DOC ID and API KEY passed in the configs.</p>
 </div>
 
 
@@ -656,7 +812,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line57">line 57</a>
+        <a href="GoogleSheetsProvider.js.html">GoogleSheetsProvider.js</a>, <a href="GoogleSheetsProvider.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -696,7 +852,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Apr 08 2023 01:58:57 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Dec 12 2025 23:54:31 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,72 +1,43 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import '@testing-library/jest-dom';
+import { render, screen, cleanup } from '@testing-library/react';
 import DefaultLoadingComponent from '../DefaultLoadingComponent';
 
+afterEach(cleanup);
+
 describe('DefaultLoadingComponent', () => {
-  it('should render correctly with default arguments', () => {
-    const component = mount(<DefaultLoadingComponent />);
-
-    const text = component.find('p.text');
-    const className = component.find('div').prop('className');
-
-    expect(text.text()).toEqual('Loading...');
-    expect(className).toEqual('data-loading');
-
-    component.unmount();
-  });
-
-  it('should render correctly with empty config argument', () => {
+  test('renders correctly with default arguments', () => {
     const config = {};
-
-    const component = mount(<DefaultLoadingComponent config={config} />);
-
-    const text = component.find('p.text');
-    const className = component.find('div').prop('className');
-
-    expect(text.text()).toEqual('Loading...');
-    expect(className).toEqual('data-loading');
-
-    component.unmount();
+    const { container } = render(<DefaultLoadingComponent config={config} />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(container.querySelector('div').className).toBe('data-loading');
   });
 
-  it('should render correctly with custom class name', () => {
+  test('renders correctly with empty config argument', () => {
+    const { container } = render(<DefaultLoadingComponent config={{}} />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(container.querySelector('div').className).toBe('data-loading');
+  });
+
+  test('renders correctly with custom class name', () => {
     const config = { className: 'my-custom-class' };
-
-    const component = mount(<DefaultLoadingComponent config={config} />);
-
-    const className = component.find('div').prop('className');
-
-    expect(className).toEqual(config.className);
-
-    component.unmount();
+    const { container } = render(<DefaultLoadingComponent config={config} />);
+    expect(container.querySelector('div').className).toBe(config.className);
   });
 
-  it('should render correctly with custom text', () => {
+  test('renders correctly with custom text', () => {
     const config = { text: 'my custom error text' };
-
-    const component = mount(<DefaultLoadingComponent config={config} />);
-
-    const text = component.find('p.text');
-
-    expect(text.text()).toEqual(config.text);
-
-    component.unmount();
+    render(<DefaultLoadingComponent config={config} />);
+    expect(screen.getByText(config.text)).toBeInTheDocument();
   });
 
-  it('should render correctly with custom config arguments', () => {
+  test('renders correctly with custom config arguments', () => {
     const config = {
       className: 'my-custom-title',
       text: 'my custom loading text',
     };
-
-    const component = mount(<DefaultLoadingComponent config={config} />);
-
-    const text = component.find('p.text');
-    const className = component.find('div').prop('className');
-
-    expect(text.text()).toEqual(config.text);
-    expect(className).toEqual(config.className);
-
-    component.unmount();
+    const { container } = render(<DefaultLoadingComponent config={config} />);
+    expect(screen.getByText(config.text)).toBeInTheDocument();
+    expect(container.querySelector('div').className).toBe(config.className);
   });
 });

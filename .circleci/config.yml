@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:16.3
+      - image: cimg/node:20.19
     steps:
       - checkout
       - run: echo "Running tests"
@@ -12,7 +12,7 @@ jobs:
       - run: npm run test:coverage
   build:
     docker:
-      - image: circleci/node:16.3
+      - image: cimg/node:20.19
     steps:
       - checkout
       - run: echo "build project"
