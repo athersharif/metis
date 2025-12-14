@@ -1,6 +1,6 @@
 {
   "name": "react-db-google-sheets",
-  "version": "3.0.0",
+  "version": "4.0.0-alpha.0",
   "description": "React HOC for using Google Sheets as Database",
   "main": "dist/metis.cjs.min.js",
   "module": "dist/metis.esm.min.mjs",
